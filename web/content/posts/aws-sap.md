@@ -309,5 +309,59 @@ draft: true
     + Round Robin: ALB,CLB
     + Flow hash: Only Network LB
 ### Api Gateway
-- 
-
+- Limit:  29 seconds, 10MB payload
+- Integrations: * HTTP
+                    * Lambda
+                    * AWS Service
+- Endpoint Types:
+    + Edge-Optimized: For global clients
+        * Request are routed through CloudFront(improve latency)
+        * Still lives only one region
+    + Regional: For same region
+        * Manually combine with CloudFront
+- Cache: 0 - 300 sec. invalidate the cache with header: Cache-Control: max-age=0
+- Errors:
+    + 400 Bad Request
+    + 403: Access Denied. WAF Filter
+    + 429: Quota exceeded
+    + 502: Incompatible output
+    + 504: Timeout
+- Security:
+    + Load SSL
+    + Resource based policy: Control who can access the API
+    + IAM Execution Role
+    + CORS
+- Authentication:
+    + IAM based access: Pass IAM Credentials in headers through Sig V4
+    + Lambda Authorizer: Verify Oauth, third party, SAML
+    + Cognito User Pools: Client authenticates with Cognito
+- Logs: 
+    + Cloudwatch Logs: 
+    + IntegrationLatency, Latency, CacheHitCount, CacheMissCount
+- X-ray:
+    + Tracing extra information 
+    + Xray API gateway, Lambda gives you the full picture
+### AWS AppSync:
+- Grapql support
+- Realtime with websocket or MQTT
+- For mobile: local data acess and synchronization
+### Route 53
+- Record Types:
+    + A: IPV4
+    + AAAA: Ipv6
+    + CNAME: map hostname to another hostname and can't create CNAME for the top node of a DNS namespace
+    + NS: name servers for hosted zone
+- Targets:
+    + ELB
+    + Cloudfront
+    + API GW
+    + Beanstalk
+    + S3
+    + VPC Interface Endpoint
+    + Global Accelerator
+    + Route53
+- Zones:
+    + Public zones: Route traffic on the internet
+    + Private zones: Route traffic within one or more vpcs
+- DNSSEC: 
+    + Protects against Man in Middle Atk
