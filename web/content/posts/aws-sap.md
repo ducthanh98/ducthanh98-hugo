@@ -286,8 +286,10 @@ draft: true
     + Canary: try X percent then 100%
     + AllAtOnce: immediate
 - Synchronous Invocations: Cli,sdk,api gateway
-- Asynchronous Invocations: S3,SNS, Event Bridge
-- Attempts to retry on 3 errors
+- Asynchronous Invocations: 
+    + S3,SNS, Event Bridge
+    + Can define a DLQ: SNS or SQS
+    + Attempts to retry on 3 errors
 ### Load Balancer
 - Classic LB: HTTP or TCP. supports only one SS
 - Application LB: 
@@ -364,4 +366,99 @@ draft: true
     + Public zones: Route traffic on the internet
     + Private zones: Route traffic within one or more vpcs
 - DNSSEC: 
-    + Protects against Man in Middle Atk
+    + Protects against Man in Middle Atks
+    + Works only with Public Hosted Zone
+- Resolver Endpoint:
+    + Inbound: DNS Resolver on your network can forward DNS queries to Route 53
+    + Outbound: Use Resolver Rule to forward DNS queries to your DNS Resolver
+    + Each endpoint supports up to 10 000 queries/second/ip
+- Rules:
+    + Forwarding Rule: Forward DNS queries for a specified domain or all its subdomain to target IP addresses
+    + System Rules: Overrides the Forwarding Rules
+    + Auto-defined System Rules: Defines how DNS queries for selected domains are resolved(eg AWS internal domain names, Privated Hosted Zones, ...)
+### AWS Global Accelerator
+- Good fit for non HTTP use cases: UDP,TCP,Voice over IP
+- Good for use cases that require static IP(2 Anycast IP)
+- Good for use cases that require deterministic, fast regional failover
+### AWS Outposts:
+- Server racks that offers the same aws infrastructure, services, APIs and tools to build your own system just as in the cloud.
+- You are responsible for the Outposts Rack physical security
+- Benefits:
+    + Low-latency access to on-premises systems
+    + Local data processing
+    + Data residency
+    + Easier migration from on-permises to cloud
+    + Fully managed service
+- Some services that work on Outposts:
+    + EC2
+    + EBS
+    + S3
+        * Use S3 APIs to store and retrieve
+        * S3 Storage class named s3 outposts
+        * Default encryption: SSE-S3
+        * S3 outposts -> s3 access point <- ec2
+        * S3 outposts -> datasync -> S3
+    + EKS
+    + ECS
+    + RDS
+    + EMR
+### AWS WaveLength
+- Bridge AWS services to the edge of 5G networks
+- Ec2, EBS,VPC
+- Ultra-low latency applications through 5G
+- No additional charges or service agreements.
+- Use cases: Smart cities, Conntected vehicles, real-time gaming, AR/VR
+### AWS Local Zones
+- Place AWS compute, storage, database, ... closer to end users to run latency-sensitive applications.
+- Extend your VPC to more locations - extension of an AWS Region
+- Compatible with EC2, RDS, ECS, EBS, Elastic Cache,Direct Connect
+- Example: 
+    + AWS Region: us-east-1
+    + AWS Local Zones: Boston, Chicago
+## Storage
+### EC2
+- Network drive you attach to 1 instance only
+- Can be resized
+- Only gp2/gp3 and io1/io2 can be used as boot volume
+- EBS Backup
+    + Only backup changed blocks
+    + Use IO so you shouldn't run them while your application is handling a lot of traffic
+    + Snapshots will be stored in s3
+    + Copy snapshots across region
+    + Make AMI from snapshots
+- Data Lifecyle Manager
+    + Automate the creation, retention and deletion of EBS snapshots and EBS-backed AMIs
+    + Use resource tags to identify the resources
+    + Can't be used to manage snapshots/AMIS created outside DLM
+- AWS Backup
+    + Manages and monitors backups across the AWS services you use from a single place
+- io1/io2:
+    + Attach the same EBS to mutiple EC2 instances in the same AZ
+    + Must use a file system that's cluster-aware
+- Local Instance Store: 
+    + Very high IOPS
+    + Disks up to 7.5TB, stripped to reach 60TB
+    + Can not be increased in size
+    + Risk of data loss if hardware fails
+### EFS
+- Can be mounted to many EC2 in multi A-Z
+- Expensive(3x gp2), pay per GB used
+- Compatible with Linux, POSIX compliant, NFSv4.1
+- Attach to one VPC, create one ENI per zone
+- Scale up to 1000s, 10gb/s throughput
+- Mode:
+    + Performance Mode: 
+        * General purpose: latency-sensitive(web server, CMS)
+        * Max IO: higher latency, throughput, highly parallel, ...
+    + Throughput Mode:
+        * Bursting(1 TB = 50Mb/s + burst up to 100Mb/s)
+        * Provisioned: set your throughput regardless of storage size, ...
+- Storage Tiers:
+    + Stand and EFS-IA. 
+    + Life cycle policy: Maximum 30 days
+- Access Points: 
+    + Easily manage applications access to NFS environments
+    + Restrict access from NFS clients using IAM policies
+- File system policies:
+    + Grants full access to all clients
+    + Same S3 bucket policy
