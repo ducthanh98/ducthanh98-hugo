@@ -461,4 +461,4 @@ draft: true
     + Restrict access from NFS clients using IAM policies
 - File system policies:
     + Grants full access to all clients
-    + Same S3 bucket policy
+    + Same S3 bucket policy .
