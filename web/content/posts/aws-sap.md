@@ -462,3 +462,103 @@ draft: true
 - File system policies:
     + Grants full access to all clients
     + Same S3 bucket policy .
+- Cross Region Replication
+    + Replicate objects in an EFS file system to another AWS region
+    + Setup for new or existing EFS file systems
+    + Doesn't affect the provisioned throughput of the EFS filesyste
+    + Use cases: meet your compliance and business continuity goals
+### S3
+- Anti patterns: 
+    + Lots of small files
+    + POISX file system (use EFS instead)
+    + Search features, queries, rapidly changing data
+    + Dynamic content
+- Storage classes comparison
+![Storage classes comparison](/s3_storage_classes_comparison.png)
+- S3 Event Notifications
+    + Some useful events: S3:ObjectCreated, S3:ObjectRemoved, S3:ObjectRestore, S3:Replication
+    + Create as many s3 events as desired 
+    + Deliver events in second but can sometimes take a minutes or longer
+    + Object name filtering possible
+- Baseline: 3500 PUT/COPY/POST/DELETE and 5500 GET/HEAD per second per prefix in a bucket
+- S3 Performance:
+    + Multi-part upload: recommended for files > 100MB, must use for files > 5GB. Can help parallelize uploads(speed up transfers)
+    + S3 Transfer Acceleration: Increase transfer by transfering file to an AWS edge location. Compatible with multipart-upload
+    + S3 Byte-Range Fetches: Can be used to speed up downloads and retrieve only partial data
+- Storage Class Analysis: 
+    + Help you decide when to transition objects to the right storage class
+    + Recommendations for Stand and Stand-IA
+    + Updated daily 
+    + 24-48h hours to start seeing data analysis
+    + Visualize data in QuickSight
+- Storage Lens
+    + Default dashboard or create your own dashboard
+    + Aggregate data for Organization, specific accounts, regions, buckets or prefixs
+    + Can be configured to export metrics daily to an s3 bucket(CSV, Parquet)
+    + Free Metrics: 
+        * Available for all customers
+        * Contains around 28 usage metrics
+        * Data is available for queries for 14 days
+    + Advanced metrics and recommendations
+        * additional paid metrics and features
+        * Advanced metric: activity, advanced cost optimization, advanced data protection, status code
+        + Cloudwatch Publishing: Access metrics in CloudWatch without additional charges
+        + Prefix Aggregation: Collect metrics at the prefix level
+        + Data is available for queries for 15 months
+### Amazon Fsx
+- Fsx for Windows:
+    + Supports SMB and NFTS, Active Directory
+    + Can be mounted on Linux EC2 instances
+    + Supports Distribute File System(DFS) Namespaces 
+    + Scale up to 10s of GB/s, millions of IOPS, 100s PB of data
+    + Storage Options: 
+        * SSD
+        * HDD
+    + Can be accessed from your on-premises(VPN and Direct Connect)
+    + Backed-up daily to S3
+    + Can be configured to be multi-AZ(HA)
+- Fsx for Lustre
+    + ML, HPC, Video Processing, Financial Modeling
+    + Scales up to 100s GB/s, millions of IOPS, sub-ms latencies
+    + Seamless integration with s3
+    + Storage Options: 
+        * SSD
+        * HDD
+- Deployment Options:
+    + Scratch File System:
+        * Temporary storage
+        * Data is not replicated
+        * Use case: short processing, optimize costs
+    + Persistent
+        * Long-term storage, sesitive data
+        * Replicated within same AZ
+        * Replace failed files within minutes
+- Fsx for ONTAP
+    + NFS, SMB, iSCSI, 
+    + Move workloads running on ONTAP or NAS to aws
+    + Storage shrink or grows automatically
+- FSX for OpenZFS
+    + NFS, ZFS protocols
+- Using DataSync to move from One AZ to Multiple AZ or decrease volume size
+### DataSync
+- On premises: Need agent
+- File permissions and metadata are preserved
+- One agent task can use 10Gbps, setup a bandwidth limit
+- Private VIF through Direct Connect
+    + Agent -> Direct Connect -> Private Link -> Interface VPC Endpoint -> AWS DataSync
+### AWS Transfer 
+- Transfers into and out of S3 or EFS
+- FTP, FTPS, SFTP
+- Integrate with existing authentication systems (AD, LDAP, Cognito, Custom)
+- Types:
+    + Public Endpoint: 
+        * Ips managed by aws
+        * Cant setup allow lists by source ip
+    + VPC Endpoint with internal access
+        * Static private ips
+        * Setup allow lists(SG and NACL)
+    + VPC Endpoint with inter-facing
+        * Static private ips
+        * Static publics ips
+        * Setup sg
+
