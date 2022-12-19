@@ -562,3 +562,162 @@ draft: true
         * Static publics ips
         * Setup sg
 
+## Caching
+### Cloudfront
+- Improves read performance, content is cached at edge
+- Integration with Shield, WAF, Route 53
+- Expose external HTTPS
+- Support Websocket
+- Origins:
+    + S3: 
+        * Enhanced security with Origin Access Control(OAC)
+        * Enable Static Web Hosting to configure
+    + Media Store Container && Media Package Endpoint
+        * Deliver video on-demand or live streaming video using AWS Media Services
+    + Custom Origin(HTTP):
+        * EC2
+        * ALB or CLB
+        * API Gateway
+        * HTTP Backend
+- Cloudfront vs Cross Region:
+    + CloudFront: Great for static content that must be available everywhere
+    + Cross region: Great for dynamic content that needs to be avaiable at low-latency in few regions
+- Restrict access to ALB and Custom Origins:
+    + Configure CloudFront to add Custom HTTP Header
+    + Configure the ALB to only forward request that contain that custom header
+- Origin Groups: One primary and one secondary origin
+- Geo Restriction:
+    + You can limit who can access your distribution
+    + The country is determined using a 3rd geo-ip database
+    + geo header CloudFront-Viewer-Country is in Lambda@Edge
+- Cloudfront SignedURL: 
+    + Allow access to a path, no matter the origin
+    + Only root can manage it
+    + Filter by IP, path, date, expiration
+    + Leverage caching features
+- S3 Presigned URL:
+    + Issue a request as the person who pre-signed URL
+    + Limited lifetime
+- Custom Error Pages: Use Error Caching Minium TTL 
+- Edge Function
+    + Runs close to your uses to minimize latency
+    + Doesn't have any cache, only to change requests/response
+    + Two types: CloudFront Functions && Lambda Edge
+    + Use cases: 
+        * Manipulate HTTP requests and responses
+        * Implement request filtering before reaching the application 
+        * User authentication and authorization
+        * AB testing
+    + CloudFront: Deploys at edge location
+    + Lambda Edge: Deploys at regional edge cache
+    + CloudFront Functions : 
+        * Cache key normalization: Transform request attributes
+        * Header manipulation
+        * URL rewrites
+        * Request authentication and authorization
+    + Lambda Edge:
+        * Longer execution(serveral ms)
+        * Adjustable CPU or mem
+        * Depends on 3rd lib
+        * Network access to external services for processing
+        * File system access or access to the body of HTTP request
+## Databases
+### DynamoDB
+- NoSQL database, massive scale(1 000 000 rps)
+- Similar to Cassandra
+- No disk space to provision, max object size 400kb
+- Read: Eventually, strong consistency
+- ACID support
+- Backup available, point in time recovery
+- Classes: Standard, IA
+- Data Types: String, Number, Boolean, Binary, Null, List, Map, String Set, Number Set, Binary Set
+- Primary Keys: Parition Key or Parition Key + Sort Key(timestamp is good choice)
+- Indexs:
+    + Local Second Index: 
+        * Keep the same primary key
+        * Select an alternative sort key
+        * Must be defined at table creation time
+    + Global Second Index
+        * Change the primary and optional sort key
+        * Can be defined after the table is created
+- You can only query by PK + sort key on the main table and indexes
+- TTL: 
+- DynamoDB Streams: 
+    + Can be read by Lambda, Ec2
+    + 24 hours retention of dagta
+- Global Tables:
+    + Active Active Replication, many regions
+    + Must enable DynamoDB Streams
+    + Userful for low latency, DR purposes
+- DAX
+    + Seamless cache for DynamoDB, no application re-write
+    + Write go through DAX To DynamoDB
+    + Micro-latency for cached reads and queries
+    + 5 minutes TTL by default
+    + Up to 10 nodes
+    + Multi AZ(3 nodes minimum recommended for production)
+    + Secure(KMS, CloudTrail, )
+### RDS
+- Failover:
+    + If you have an Amazon Aurora Replica in the same or a different Availability Zone, when failing over, Amazon Aurora flips the canonical name record (CNAME) for your DB Instance to point at the healthy replica, which in turn is promoted to become the new primary. Start-to-finish failover typically completes within 30 seconds.
+    + If you are running Aurora Serverless and the DB instance or AZ becomes unavailable, Aurora will automatically recreate the DB instance in a different AZ.
+    + If you do not have an Amazon Aurora Replica (i.e., single instance) and are not running Aurora Serverless, Aurora will attempt to create a new DB Instance in the same Availability Zone as the original instance
+- RDS Events: Get notified via SNS for events(operations, outages)
+- Multi AZ && Read Replicas:
+    + Multi AZ: Standby instance for failover in case of outage
+    + Replicas: Increase read throughput. Can be cross-region
+- Security:
+    + Transparent Data Encryption(TDE) for Oracle and SQL Server
+    + IAM authentication for MySQL and PostgreSQL
+- Oracle:
+    + Use RDS backup for backup and restore
+    + Use Oracle RMAN(recovery mananger) for backups and restore to non rds
+    + Real Application Cluster(RAC)
+        * RDS for Oracle doesn't support RAC
+        * RAC is working on EC2 instance because you have full control
+        * DMS works on Oracle RDS
+- RDS Proxy: you no longer need code that handles cleaning up idle connections and managing connection pools
+### Aurora
+- Automated failover for master in less than 30s
+- Support cross region replication
+- Troubleshooting RDS and Aurora Performance
+    + CW Metrics: CPU, Memory, Swap Usage
+    + Enhanced Monitoring Metrics: host level, process view, per-second metric
+    + Slow query logs
+- Convert RDS to Aurora
+    + Take a snap and restore
+    + Create new aurora replica from rds instance and promote it 
+## Service Communication
+### AWS Step Functions
+- Invoke a lambda function
+- Run an AWS Batch, ECS task
+- Insert an item to DynamoDB
+- Publish message to SNS,SQS
+- Launch an EMR, Glue, SageMaker jobs, another Step Function
+- Invoke Step Function Workflow:
+    + AWS Management Console
+    + AWS SDK(StartExecution)
+    + AWS cli(start-execution)
+    + AWS Lambda(StartExecution api call)
+    + API Gateway
+    + Event Bridge
+    + Code Pipeline
+    + Step Functions
+- Tasks
+    + Lambda Task: Invoke a lambda function
+    + Activity Task: 
+        * Activity Worker, Ec2, Mobile, on-premise DC
+        * They poll the Step Functions Service
+    + Service Task:
+        * Connect to a supported AWS service
+        * Lambda function, ECS Task, Fargate, Dynamodb, Batch Job, SNS, SQS
+    + WaitTask:
+        * Wait for a duration or unitl a timestamp
+    + Step Function doesn't integrate natively with AWS Medical Turk
+- Express Workflow
+    + Synchronous:
+        * Wait until the Workflow completes, then return the result
+        * Use cases: orchestrate microservices, handle errors, retries, parallel tasks,...
+    + Asynchronous:
+        * Doesn't for the Workflow to complete
+        * Use cases: Workflow that don't require immediate response, messaging
