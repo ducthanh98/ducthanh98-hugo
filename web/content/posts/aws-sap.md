@@ -721,3 +721,21 @@ draft: true
     + Asynchronous:
         * Doesn't for the Workflow to complete
         * Use cases: Workflow that don't require immediate response, messaging
+## Streaming
+### AWS Kinesis
+- Kinesis Data Firehose
+    + Destinations:
+        * AWS: Redshift, S3, Elastic Search
+        * 3rd partner: Splunk, Mongodb, Datadog, NewRelic
+        * Custom: HTTP endpoint
+    + Near realtime 
+        * High throughput => buffer size(32MB) hit
+        * Low throughput => buffer time(1 minute) hit
+        * => If realtime flush from Kinesis to S3 is needed , use Lambda
+    + Support custom data transformations using Lambda
+    + Send all failed or all data to a backup S3 bucket
+    + Doesn't support replay capability
+- Kinesis Data Analytics
+    + Streaming ETL: select columns, make simple transformation, on streaming data
+    + Continuous metric generation : live leaderboard for a mobile game
+    + Reponse analytics: look for a certain criteria and build alerting
