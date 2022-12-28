@@ -873,4 +873,38 @@ draft: true
 - Use EventBridge(CW) to react to changes for AWS Health events
 ## Deployment and Management
 - We still have full controll over the underlying services
-- Free but you pay for the underlying instances
+- Free but you pay for the underlying instances.
+- Support many platforms. If not supported, you can write your own custom platform
+- Deployment
+    + Blue/Green:
+        * Zero downtime
+        * The new environment can be validated independently and rollback if issues
+        * Route53 can be setup using weighted polies to redirect a little bit of traffic
+        * Using Beanstalk swap URLs(DNS swap) when done
+### Code Deploy
+- In place update: Update current existing EC2 instances
+- Blue/Green deployment: 
+    + Must be using an ELB
+    + A new auto scaling group is created
+- Lambda
+    + Traffic shifting feature
+    + Pre and post traffic hooks features to validate deployment
+    + SAM natively use CodeDeploy
+- ECS
+    + Support Blue/Green
+    + A new task set is created, and traffic is re-routed to the new task test
+    + Support Canary Deployment(Canary10Percent5Minutes)
+### Cloudformation
+- Backbone of Beanstalk, Service Catalog, SAM
+- Use DeletionPolicy to control how Cloudformation delete or not a resource
+- Custom Resources :  You can define a custom resource to address any of these cases:
+    + A AWS Resource is not yet supported
+    + An On-premise resource
+    + Emptying an S3 before being deleted
+- Stacksets:
+    + Create, update, delete stack across multiple accounts and regions with a single operation
+    + Admin can create stacksets and trusted account can create,update,delete stack instances from Stacksets
+    + When you update a stackset, all associated stack instances are updated throughout all accounts and regions
+    + Enable Automatic Deployment to automatically deploy to accounts in OG or OUs
+- Cloudformation Drift: Detect drift on an entire stack or an individual resources within a stack
+- Integrate with secret manager:
