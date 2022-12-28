@@ -4,12 +4,22 @@ date: 2022-11-28T22:58:35+07:00
 draft: true
 ---
 
+## OSI Model
+### Layer 1
+- Physical shared medium
+- Standards for transmiting and receiving from the medium
+- No access control
+- No device => no device communications
+
 ## Identify and Federation
 ### IAM:
     - Explicit DENY has precedence over ALOW
     - NotAction: explicit allow a FEW THING in there
     - Access Advisor: See permissions granted and when last accessed
     - Access analyzer: Analyze resources that are shared with external entity
+    - Access Key: 
+        + Can have two access keys
+        + Can be created, deleted, made inactivate or activate
 ### STS
     - When you assume a role, you give up your permissions and take the permissions assigned to the role and vice versa
 ### AWS Organization
@@ -17,7 +27,7 @@ draft: true
         + Consolidated billing feature: 
             + Consolidated billing across all acounts - single payment method
             + Pricing benefits from aggregated usage
-        + Invited accounts must approve enabling allf eatures
+        + Invited accounts must approve enabling all features
         + Ability to apply an SCP
         + Reserved Instances: All accounts can receive the benefits that are purchased by any another account. The payer can turn off reserved instance discount and savings plans discount sharing fr any accounts, including the payer
     - Service Control Policies:
@@ -739,3 +749,128 @@ draft: true
     + Streaming ETL: select columns, make simple transformation, on streaming data
     + Continuous metric generation : live leaderboard for a mobile game
     + Reponse analytics: look for a certain criteria and build alerting
+### AWS MSK
+- Consumers: 
+    + Kinesis Data Analytics for Apache Flink  
+    + AWS Glue
+    + Lambda
+    + Application
+### AWS Batch
+- Run as Docker images
+- No time limit
+- 2 Options
+    + AWS Fargate
+    + Dynamic provisioning 
+- Example: batch process of images, thousands of concurrent jobs, ...
+- Schedule Batch Jobs using Amazon EventBridge
+- Orchestrate Batch Jobs using AWS Step Functions
+- Environments: 
+    + Managed Compute Environment: You can choose On-demand or spot(no need to worry about capacity)
+    + Unmanaged Compute Envrionment:
+- Modes: 
+    + One Mode
+    + Multi Node: 
+        * large scale, good for HPC.
+        * Doesn't work with spot
+        * Work better if your EC2 launch mode is a placement group
+### AWS EMR
+- EMR stands for Elastic MapReduce
+- Helps creating Hadoop cluster(big data) 
+- Nodes:
+    + Master Node
+    + Core Node
+    + Task Node(Optional)
+- Purchasing options: on-demand, reserved, spot
+- Instance Configuration
+    + Uniform Intance Groups: Select a single instance type and purchasing option for each node(has auto scaling)
+    + Instance fleet: select target capacity, mix instance types and purchasing options (no auto scaling)
+### AWS Glue
+- Manage extract, transform and load (ETL) service
+- Fully serverless
+- Example: S3, RDS -> Extract -> Glue(Transform) -> Load -> Redshift
+### Redshift
+- Based on postgresql
+- OLAP - Online Analytical Processing
+- 10x better performances than other data warehouses, scale to PBS of data
+- Columnar storage
+- Massive Parallel Query
+- Load from S3, Kinesis Firehose, DynamoDb, DMS
+- Snapshots: 
+    + Automated: every 8 hours, every 5 GB, or on a schedule. Set retention
+    + Manual: snapshot is retained until you delete it
+    + Config it to automatically copy snapshots to another region
+    + Copy cross-region snapshots for an encrypted Redshift: Use snapshot copy grant
+- Redshift Spectrum: 
+    + Query S3 without loading it
+    + Must have a Redshift cluster available to start query
+- Workload Management: Enables you to flexibly manage queries priorties within workloads.
+- Concurrency scaling: 
+    + Charged per second
+    + Provide consistently faster performance 
+    + Automatically adds additional cluster capacity
+### AWS Timestream
+- Time series database
+- AWS IOT
+- Kinesis 
+- Prometheus 
+### AWS Athena
+- Using SQL(built on Presto)
+- Supports CSV, JSON, ORC, Parquet
+- Commonly used with Amazon Quicksight for reporting/dashboard
+- Use cases: Business intelligence/analytics/reporting/ query logs, CloudTrails
+- Use columnar for cost savings
+    + Apache Parquet or ORC is recommend
+    + Huge performance improvement
+    + Use Glue to convert you data 
+- Compress data for smaller retrievals(bzip2, gzip, )
+- Partition datasets in S3 for easy querying
+### AWS Quicksight
+- Serveless dashboard
+## Monitoring
+### Cloudwatch
+- CW Metrics:
+    + Provided by many AWS service
+    + EC2 Standard: 5min, detail monitoring: 1m
+    + Ram is not a built-in metric
+    + Create custom metrics: Standard resolution: 1m, high resolution: 1s
+- CW Alarms
+    + Trigger actions
+    + Intercepted by AWS EventBridge
+- CW Dashboards:
+    + show metrics of multiple regions
+- CW Synthetics Canary
+    + Configurable script that monitor your  API, Websites, ...
+    + Reproduce what your customers do programmatically to find issues
+    + Integration with CW
+    + Scripts written in Nodejs, Python
+    + Run once or regular SCHEDULE
+    + Blueprints:
+        * Heart beat monitor: load url, storage screenshot and an HTTP archive file
+        * API Canary: test basic read and write functions
+        * Broken Link Checker: check all links inside the URL that you are testing
+        * Visual Monitoring : compare a screenshot taken during a canary run with a baseline screenshot
+        * Canary Recorder : record 
+        * GUI Workflow Builder: verifies that actions can be taken on your webpage
+- Can define expiration policies(never,30d,...)
+- Send logs to : S3, Kinesis Stream, Firehose, Lambda, ElasticSearch
+- CW Insight can be used to query logs and add queries to CW Dashboard
+- EventBridge: Resource-based policy
+### AWS X-ray
+- Visual analysis of our application
+- Integrate with:
+    + EC2: X-ray client
+    + ECS: X-ray agent or docker
+    + Lambda
+    + Beanstalk
+    + Api Gateway
+- X-ray agent or services need IAM permissions
+### AWS Personal Health Dashboard
+- Global service
+- Show how AWS outages directly impact you
+- Show maintenace events
+- Accessible through AWS Health API
+- Aggregation across multiple accounts of an AWS Organization 
+- Use EventBridge(CW) to react to changes for AWS Health events
+## Deployment and Management
+- We still have full controll over the underlying services
+- Free but you pay for the underlying instances
