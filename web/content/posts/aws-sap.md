@@ -897,6 +897,9 @@ draft: true
 ### Cloudformation
 - Backbone of Beanstalk, Service Catalog, SAM
 - Use DeletionPolicy to control how Cloudformation delete or not a resource
+    + DeletionPolicy=Retain: Keep a resource
+    + DeletionPolicy=Snapshot: EBS, ElasticCache, DB
+    + DeletionPolicy=Delete(default) : For AWS::RDS::DB,  the default is snapshot. You need first empty S3 bucket before delete  
 - Custom Resources :  You can define a custom resource to address any of these cases:
     + A AWS Resource is not yet supported
     + An On-premise resource
@@ -908,3 +911,41 @@ draft: true
     + Enable Automatic Deployment to automatically deploy to accounts in OG or OUs
 - Cloudformation Drift: Detect drift on an entire stack or an individual resources within a stack
 - Integrate with secret manager:
+- Resource Import:
+    + Each resource must have a deletionPolicy and identifier
+    + Can't import the same resource into multiple stacks
+### Service Catalog
+- Admin can create a portfolio(collection of products) and then assign them to other user.
+- Cloudformation is backbone and helps ensure consistency and standarization by admin
+- Can give user access to launching products without requiring deep knowledge 
+- Help with governance, compliance and consistency
+### Cloud Development Kit
+- A familiar language -> CDK -> Cloudformation template
+### AWS System Manager
+- Need to install SSM agent, installed by default Linux AMI and some ubuntu ami
+- Make sure ec2 instances have a proper IAM role to allow System Manager action
+- Run command
+    + Execute a script or a command
+    + Integrate with IAM CloudTrail
+    + No need for ssh
+- Send command before an ASG instance is terminated
+    + Create hook that puts the instance in Terminating:Wait
+    + Monitor that state using Event Bridge
+    + Trigger a SSM to perform actions
+- Patch Managers
+    + Define a patch baseline
+    + Define a patch group: use tag Patch Group
+    + Define maintenance windows(schedule, patch groups, registered task)
+    + Add the AWS-RunPatchBaseLine Run command as part of the registerd tasks of the maintenance Windows
+    + Define rate control
+    + Monitor Patch Compliance using SSM Inventory
+- Session Manager
+    + Allow to start a secure shell on your EC2 or on-prem
+    + Support linux, window, mac
+    + Log can be sent to S3 or CloudWatch
+    + CloudTrail con intercept StartSession events
+- OpsCenter
+    + Resolve Operational Issues(OpsItems: issues, events and alerts)
+### CloudMap
+- Works as a service discovery
+- Use SDK, API, DNS to query AWS CloudMap
