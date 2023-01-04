@@ -29,7 +29,7 @@ draft: true
             + Pricing benefits from aggregated usage
         + Invited accounts must approve enabling all features
         + Ability to apply an SCP
-        + Reserved Instances: All accounts can receive the benefits that are purchased by any another account. The payer can turn off reserved instance discount and savings plans discount sharing fr any accounts, including the payer
+        + Reserved Instances: All accounts can receive the benefits that are purchased by any another account. The payer can turn off reserved instance discount and savings plans discount sharing for any accounts, including the payer
     - Service Control Policies:
         + SCP is applied to users and roles, service-linked role is not affected
         + Doesn't allow anything by default
@@ -96,7 +96,7 @@ draft: true
     + Organizational Trail: Setup in management account 
     + React to events the fastest:
         * Overall, it may take up 15 min to deliver events
-        *  Event Bridge: the fatest, most reactive way
+        *  Event Bridge: the fastest, most reactive way
         * CloudTrail Delivery in Cloudwatch Logs:  perform a metric filter to analyze
         * CloudTrail Delivery in S3: Delivered every 5 minutes
 ### KMS
@@ -258,9 +258,12 @@ draft: true
 ## Compute and Load Balancing
 ### Ec2
 - Ec2 Instance Refresh: Update launch template and then re-creating all Ec2 instances
+- Instances type
+    + Reserved Instaces:
+        * To renew a RI, just queue an purchase RI whenever the previous one expires 
 - Health check: 
     + EC2 Status
-    + ELB Health check(HTTP)
+    + ELB Health check(HTTP)    
 ### ECS
 - Service: How many task should run and how they should be run
 - Definition: metadata in json form
@@ -949,3 +952,92 @@ draft: true
 ### CloudMap
 - Works as a service discovery
 - Use SDK, API, DNS to query AWS CloudMap
+## AWS Cost Allocation Tags
+- Just like Tags, but they show up as column in Reports
+- Cost allocation tags just appear in the Billing Console
+- AWS Generated Cost Allocation Tags
+    + Starts with prefix aws: (eg: aws:CreatedBy)
+    + Automatically applied to the resource you creat
+- User Tag
+    + Start with prefix user:
+    + Defined by the user
+- Cost allocation Tags just appear in the Billing Console
+- Takes up 24h to show up in the report
+### Trusted Advisor
+- Can check if s3 is made public, but can't check for s3 object that are public inside of your bucket so use Event Bridge, S3 Events, AWS Config Rule instead
+- Service Limits
+    + Limit can only be monitored
+    + Cases must be created manually in AWS Support Centre to increase limits
+    + Use AWS Service Quotas
+- Enable weekly email notifications from the console
+- Ability to set CW Alarms when reaching limits
+- Programmatic Access using AWS suport API (Not support with free plan)
+### AWS Service Quotas: 
+- Notify you when you're close to a service quota value threshold
+### AWS Savings Plan
+- New pricing model to get discount based on long-term usage
+- EC2 Instance Savings plan (upto 72% - same discount as Standard RIs)
+    + Select instance family(M5,C5...) and locked to a specific region
+    + Flexible across size, OS, tenacy(dedicated or default)
+- Compute Savings plan(upto 66% - same discount as Convertible RIs)
+    + Ability to move between instance family, region, compute type,os , tenancy
+- SageMaker Savings Plan: upto 64% off for SageMaker
+### AWS Budget
+- Create budget and send alarms when costs exceeds the budget
+- 4 types: Usage, Cost, Reservation, Savings plan, ...
+- Upto 5 SNS per budget
+- Can filter by many options
+- Budget Actions: 
+    + Applying an IAM policy to a user, group, role
+    + Apply a SCP to an OU
+    + Stop EC2 or RDS
+- Cost Explorer: Forecast up to 12 months based on previous usage
+### AWS Compute Optimizer
+- Help you choose optimal configurations and right size for your workloads
+- Use ML to analyze your resources configurations and their CW metrics
+- Need CW Agent to analyze RAM metrics
+- Supported resources:
+    + EC2
+    + Auto Scaling
+    + EBS
+    + Lambda
+- Lower your cost by up to 25%
+## Migration
+ ### 6R
+- Rehosting
+    + lift and shift
+    + simple migrations by re-hosting on AWS
+    + Cost save as much as 30% on cost
+    + Example: Using AWS VM Import/Export, AWS Server Migration Service
+- Replatforming
+    + Migrate your db to RDS
+- Repurchase
+    + drop and shop
+- Refactoring/Re-architecting
+    + Reimagining how the application is architected using Cloud Native
+- Retire
+    + Turn off things you don't need
+- Retain
+### Storage Gateway
+- Bridge between on-premises data and cloud data
+- Types
+    + S3 File Gateway: 
+        * Use NFS or SMB
+        * Cache most recently data
+        * Bucket access using IAM role for each file Gateway
+        * Transition to S3  Glacier using Lifecyle policy
+    + Fsx File Gateway
+        * Native access to AWS Fsx
+        * Useful for group file shares and home directories
+    + Volume Gateway
+        * Block storage using ISCSI protocol
+        * Backed by EBS snapshot
+        * Cached Volumes: low latency access to most recent data
+        * Stored Volumes: entire dataset is on premise, scheduled backups to s3
+    + Tape Gateway
+        * Tape, iSCSI
+- Hardware  appliance
+    + Helpful for daily backups in small data centers
+    + Works with File Gateway, Volume Gateway, Tape Gateway
+- Extensions:
+    + 
