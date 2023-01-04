@@ -1040,4 +1040,34 @@ draft: true
     + Helpful for daily backups in small data centers
     + Works with File Gateway, Volume Gateway, Tape Gateway
 - Extensions:
-    + 
+### Snow Family
+- offline devices to perform data migrations
+- Move TBs or PBs of data in or out
+- Types:
+    + Snowball Edge: 
+        * Pay per data transfer job
+        * Snowball Edge Storage Optimized: 80TB of HD capacity
+        * Snowball Ede Compute Optimized: 42TB of HDD capacity
+    + Snow Cone:
+        * 8TBs of usable storage
+        * Must provide your own battery
+        * Can be sent back to AWS or use AWS DataSync to send data
+    * Snowmobile
+        * Transfer extrabytes of data
+        * 100PB of capacity
+        * Better than snowball if you transfer more than 100PB
+- Use AWS OpsHub to manage your Snow family device
+- improve transfer performance
+    + Perform multiple write opertions at one time: from multiple terminal
+    + Transfer small files in batches
+    + Don't perform other operations on files during transfer
+    + Reduce local network use
+    + Eliminate unnecessary hops
+- The data transfer rate is typically between 25MB and 40MB/s. If you need more , Use Amazone S3 Adpater for Snowball
+### AWS Cloud Adoption Readiness Tool(CART)
+- Develop efficient and effective plans for cloud adoption and migrations
+### Disater Recovery
+- Backup and restore: High RTO and RPO
+- Pilot Light: A small version of the app is always running in the cloud
+- Warn Standby: Full system is up and running, but at minimum size
+- Multi Size/Hot site approach: Very low RTO - very expensive. Full production scale is running AWS and On-premises
