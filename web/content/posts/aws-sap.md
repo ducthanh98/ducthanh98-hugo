@@ -1015,6 +1015,7 @@ draft: true
     + drop and shop
 - Refactoring/Re-architecting
     + Reimagining how the application is architected using Cloud Native
+    + Example: MongoDB to DynamoDB
 - Retire
     + Turn off things you don't need
 - Retain
@@ -1071,3 +1072,50 @@ draft: true
 - Pilot Light: A small version of the app is always running in the cloud
 - Warn Standby: Full system is up and running, but at minimum size
 - Multi Size/Hot site approach: Very low RTO - very expensive. Full production scale is running AWS and On-premises
+### AWS Fault Injection Simulator
+- Based on Chaos Engineering - stressing an application by creating disruptive events(sudden increase CPU and Memory)
+- Supports: EKS,EC2, ECS,RDS
+### AWS VM Migration
+- Application Discovery Services
+    + Gathering information about on-premise data centers
+    + Agentless discovery(Application Discovery Agentless Connector):
+        * Open Virtual Application(OVA) package that can be deployed to a VM Host
+        * VM Inventory, Configuration, performance history such as CPU, memory, disk usage
+        * Any OS
+    + Agent-based discovery
+        * system configuration, system performance, running processes, network, 
+        * Support: Microsoft Server, linux, ...
+    + Data can be exported as CSV or viewed within AWS Migration Hub
+    + Query with Athena
+- Application Migration Service
+    + lift and shift
+    + Convert physical, virtual server to run natively on AWS
+    + Minimal downtime, reduced costs
+- Elastic Disater Recovery
+    + Quickly and easily recover your physical, virtual into AWS
+    + Continuous block-level replication for your servers
+    + Example: protect your critical databases
+- AWS Migration Evaluator
+    + Analyze current state, define target state, then develop migration plan
+### AWS Backup
+- Supported service:
+    + EC2
+    + RDS, DynamoDB, DocumentDB, Neptune
+    + EFS, FSx
+    + Storage Gateway(Volume Gateway)
+- Support cross-region and cross-account backups
+## VPC
+### Basics
+- Public subnets
+    + Has a route table that sends 0.0.0.0/0 to an IGW
+    + Must have a public ipv4
+- Private subnets
+    + Access internet with a nat instance or nat gateway
+    + 0.0.0.0/0 -> nat
+- VPC Flow logs
+    + Can be defined at the VPC level, Subnet, ENI level
+    + can be sent to CW and S3
+### VPC Peering
+- Connect two VPC, privately using AWS network
+- Must not have overlapping CIDR
+- You must update route tables in each VPC's subnet to ensure instances can communicate
