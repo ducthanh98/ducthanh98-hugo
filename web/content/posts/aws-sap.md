@@ -1119,3 +1119,31 @@ draft: true
 - Connect two VPC, privately using AWS network
 - Must not have overlapping CIDR
 - You must update route tables in each VPC's subnet to ensure instances can communicate
+### Transit Gateway
+- Trasitive peering between thousands of VPC and on premises, hub connection
+- Regional resource
+- Share across-account using RAM
+- RouteTables: Limit which VPC can talk with other VPC
+- Work with Direct Connection Gateway, VPN
+- Support IP Multicast
+### VPC Endpoint
+- VPC Endpoint Gateway
+    + Only works for S3, DynamoDB, must create one gateway per vpc
+    + Must update route table entries
+    + Gateway is defined at VPC level
+    + DNS resolution must be enabled
+    + Gateway endpoint cannot extended ou of VPC(VPN,DX, peering)
+- VPC Endpoint Interface
+    + Provision an ENI that will have a private endpoint interface
+    + Leverage SG for security
+    + Private DNS
+    + DNS resolution must be enabled
+    + Interface can be accessed from DX,VPN
+- VPC Endpoint policy and S3 policy
+    + S3 bucket may have: "aws:sourceVpce":"vpce-1a2b3c4d" to deny any traffic that doesn't come from a specific VPC Endpoint
+    + S3 policies can restrict access only from public IP or EIP(private ip is not working) 
+    + aws:SourceIp doesn't apply for VPC endpoints
+### AWS PrivateLink
+- Requires a network load balancer(Service VPC) and ENI(Customer VPC)
+- PrivateLink with DX: Corporate -> DX -> Private VIF -> Private Link -> Gateway Interface -> S3
+- 
