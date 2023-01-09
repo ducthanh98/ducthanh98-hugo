@@ -1146,4 +1146,57 @@ draft: true
 ### AWS PrivateLink
 - Requires a network load balancer(Service VPC) and ENI(Customer VPC)
 - PrivateLink with DX: Corporate -> DX -> Private VIF -> Private Link -> Gateway Interface -> S3
-- 
+### AWS Site to Site VPN
+- Establish
+    + On-premise
+        * Setup a software or hardware VPN appliance
+        * The on-premise VPN should be accessible using a public IP 
+    + AWS
+        * Setup virtual private gateway(VGW) and attach to your VPC
+        * Setup a customer gateway to point the on-premise VPN appliance
+    => Two VPN connections are created for redundancy, encrypted using IPSec
+- Route Propagation
+    + Static routing
+        * Create static route in corperate for specific IP through CGW
+        * Create static route in AWS for specific IP through VGW
+    + Dynamic routing(BGP) 
+- VPN Cloudhub
+    + Connect up to 10 CGW for each VGW
+- VPN to multiple VPC
+    + Create a seperate VPN connection for each CGW
+    + Direct conneciton is recommended because it has a direct connection gateway
+-  Shared service 
+### Direct Connection
+- Provides a dedicated private connection from a remote network to your VPC
+- Private access to AWS Services through VIF
+- Must setup a failover DX or VIF
+- Virtual Interfaces
+    + Public VIF: connect to public AWS Endpoints
+    + Private VIF: connect to a resources in your VPC
+    + Transit Virtual Interface: connect to a resource in your VPC using Transit Gateway
+- VPC ENDPOINTS can't accessed through private VIF
+- Encryption
+    + Not encrypted by default
+    + DX + VPN provides an IPSec connections
+    + VPN over DX use public VIF
+- LAG
+    + Increased speed and failover 
+    + Aggregate up to 4 connections 
+    + Conditions:
+        * Dedicated connection
+        * Same bandwidth
+        * Terminate at the same AWS DX Endpoint
+- DX Gateway: Setup a DX to one or more VPC in many different regions
+### VPC Flow Logs
+- Capture information about IP traffic going into your interfaces
+    + VPC Flow Logs
+    + Subnet FLow Logs
+    + ENI FLow Logs
+- Save to CW, S3
+- Query using Athena or CW Insight
+### AWS Network Firewall
+- Protect your entire VPC from layer 3 to 7
+- Internally,  Network Firewall use AWS Gateway Load Balancer
+- Rule can centrally managed cross-account by AWS Firewall Manager to apply to many VPCs
+- Traffic filtering: allow, drop, alert
+- Send logs of rule matches to S3, CW, Firehose
