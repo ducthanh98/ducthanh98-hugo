@@ -487,7 +487,7 @@ draft: true
     + Search features, queries, rapidly changing data
     + Dynamic content
 - Storage classes comparison
-![Storage classes comparison](/s3_storage_classes_comparison.png)
+![Storage classes comparison](/aws/s3_storage_classes_comparison.png)
 - S3 Event Notifications
     + Some useful events: S3:ObjectCreated, S3:ObjectRemoved, S3:ObjectRestore, S3:Replication
     + Create as many s3 events as desired 
@@ -1200,3 +1200,13 @@ draft: true
 - Rule can centrally managed cross-account by AWS Firewall Manager to apply to many VPCs
 - Traffic filtering: allow, drop, alert
 - Send logs of rule matches to S3, CW, Firehose
+
+## Machine Learning
+# Kendra
+![Screenshot](/aws/kendra.png)
+# Personalize
+![Screenshot](/aws/personalize.png)
+# Textract
+- Automatically extracts text, handwriting, data from any scanned data
+# Overview
+![Screenshot](/aws/ml_overview.png)
