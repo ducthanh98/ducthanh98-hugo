@@ -1210,3 +1210,11 @@ draft: true
 - Automatically extracts text, handwriting, data from any scanned data
 # Overview
 ![Screenshot](/aws/ml_overview.png)
+
+- I would like to tell you a'bout a 'very cre'ative 'person that I 'really 'admire. He was William Henry Perkin, the 'scientist who in'vented syn'thetic dyes
+- I can re'member 'correctly that I first knew him when I was a first-year 'student at uni'versity.At that time, while pre'paring for my 'project, I saw an 'article a'bout his life. When Perkin was a child, he took great 'interest in re'search. Later, his 'talent and de'votion to 'chemistry led to his in'ventions. In par'ticular, he spent his va'cation in his la'boratory 'trying to find a 'medical 'treatment for a di'sease. 'Even though he did not suc'ceed, he pro'duced the first syn'thetic dye. This suc'cess made him rich and 'famous but it could not stop him from 'working and in'venting 'many 'other dyes
+- What struck me was that he did not give up 'after the failures of 'thousands of ex'periments and that he 'always tried to make scien'tific in'ventions. The 'story of his life taught me that 'any in'vention is the result of hard work mixed with 'passion
+
+- I would like to tell you a'bout a 'highly in'novative person that I 'greatly 'admire. He was William Henry Perkin, the 'talented 'chemist who in'vented syn'thetic dyes
+- I can re'member 'correctly that I first knew him when I was a freshman at uni'versity.At that time, while con'sulting 'reference ma'terials for my re'search a'ssignment, I came a'cross an 'article a'bout his life. When Perkin was a child, he took great 'interest in re'search. Later, his 'talent and de'votion to 'chemistry was the 'major 'factor con'tributing to his scien'tific 'breakthroughs. In par'ticular, he spent his va'cation in his la'boratory 'trying to find an e'ffective cure for ma'laria. 'Even though he did not suc'ceed, he pro'duced the first syn'thetic dye. This suc'cess made him rich and 'famous but it could not stop him from 'working and in'venting 'many 'other dyes
+- What struck me was that he did not give up 'after the failures of 'thousands of ex'periments and that he 'always tried to make scien'tific in'ventions. The 'story of his life taught me that 'any in'vention is the result of hard work mixed with 'passion
