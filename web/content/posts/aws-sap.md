@@ -10,50 +10,81 @@ draft: true
 - Standards for transmiting and receiving from the medium
 - No access control
 - No device => no device communications
+### Layer 2: Data Link
+
+### DDOS 
+- Type
+    + Application Layer: HTTP flood
+    + Protocol Attack: SYN Flood
+    + Volumetric: DNS Amplification
+
+
 
 ## Identify and Federation
+### Policy Priorty
+Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Policies -> Identity Policies
+### Directory Service
+- AD Connector: Only redirects no local identity data in AWS
+- Simple AD: AD compatible managed on AWS
+- AWS Managed MS AD: Establish trust connection with your on-premise AD
 ### IAM:
-    - Explicit DENY has precedence over ALOW
-    - NotAction: explicit allow a FEW THING in there
-    - Access Advisor: See permissions granted and when last accessed
-    - Access analyzer: Analyze resources that are shared with external entity
-    - Access Key: 
-        + Can have two access keys
-        + Can be created, deleted, made inactivate or activate
+- Explicit DENY has precedence over ALOW
+- NotAction: explicit allow a FEW THING in there
+- Access Advisor: See permissions granted and when last accessed
+- Access analyzer: Analyze resources that are shared with external entity
+- Access Key: 
+    + Can have two access keys
+    + Can be created, deleted, made inactivate or activate
 ### STS
-    - When you assume a role, you give up your permissions and take the permissions assigned to the role and vice versa
+- When you assume a role, you give up your permissions and take the permissions assigned to the role and vice versa
+- Temporary credentials can't be cancelled
+- Changing the trust policy has no impact on existing credentials
+- Revoking the leaked credentials: 
+    + Denying access to credentials created by AssumeRole, AssumeRoleWithSAML, or AssumeRoleWithWebIdentity
+        * Delete role, change permisisons impact all assumers
+        * you must have the PutRolePolicy to attach the AWSRevokeOlderSessions inline policy 
+    + Denying access to credentials created by GetFederationToken or GetSessionToken
+        * edit or delete the policies that are attached to the IAM user 
+        *  <strong>Note</strong>: You cannot change the permissions for an AWS account root user so we recommend that you do not call GetFederationToken or GetSessionToken as a root user.
 ### AWS Organization
-    - Feature Mode:
-        + Consolidated billing feature: 
-            + Consolidated billing across all acounts - single payment method
-            + Pricing benefits from aggregated usage
-        + Invited accounts must approve enabling all features
-        + Ability to apply an SCP
-        + Reserved Instances: All accounts can receive the benefits that are purchased by any another account. The payer can turn off reserved instance discount and savings plans discount sharing for any accounts, including the payer
-    - Service Control Policies:
-        + SCP is applied to users and roles, service-linked role is not affected
-        + Doesn't allow anything by default
-        + Restrict access to certain service
-        + You can restrict specific tags on AWS resources with AWS:TagKeys(Use either ForAllValues or ForAnyValues)
-        + Use SCP to Deny A Region aws:RequestRegion
-        + Use SCP to restrict creating resources without appropriate tags: 
+- Feature Mode:
+    + Consolidated billing feature: 
+    + Consolidated billing across all acounts - single payment method
+    + Pricing benefits from aggregated usage
+    + Invited accounts must approve enabling all features
+    + Ability to apply an SCP
+    + Reserved Instances: All accounts can receive the benefits that are purchased by any another account. The payer can turn off reserved instance discount and savings plans discount sharing for any accounts, including the payer
+- Service Control Policies:
+    + SCP is applied to users and roles, service-linked role is not affected
+    + Doesn't allow anything by default
+    + Restrict access to certain service
+    + You can restrict specific tags on AWS resources with AWS:TagKeys(Use either ForAllValues or ForAnyValues)
+    + Use SCP to Deny A Region aws:RequestRegion
+    + Use SCP to restrict creating resources without appropriate tags: 
             Null:{
                 aws:RequestTag/xxx: true
             }
-    - Tag Policies:
-        + Ensure consistent tags, audit tagged resources
-    - Opt out
-        + AWS AI may use your content to continuous improvent
-        + Attached to OG, OU, individual member
-    - Backup policies
-        + Enables you to create backup plan.
-        + Attached to OG, OU, individual member
-        + Immutable backup plans appear in Member accounts
+- Tag Policies:
+    + Ensure consistent tags, audit tagged resources
+- Opt out
+    + AWS AI may use your content to continuous improvent
+    + Attached to OG, OU, individual member
+- Backup policies
+    + Enables you to create backup plan.
+    + Attached to OG, OU, individual member
+    + Immutable backup plans appear in Member accounts
 ### RAM
+- Products need to support RAM
+- No charge for using RAM
 - Share with other account or your OG
 - Avoid resource duplication
 - Share route53: https://aws.amazon.com/vi/premiumsupport/knowledge-center/route-53-share-resolver-rules-with-ram/
 - Sharing managed prefix list: https://docs.aws.amazon.com/vpc/latest/userguide/sharing-managed-prefix-lists.html
+### AWS SSO
+- Choose Identity Provider -> Login -> Select AWS Account to Assume
+### AWS Cognito
+- User pool: user management,sign in, sign off and get jwt
+- Identity Pool: return temporary credentials
 ### Aws Control Tower
 - Easy way to setup and govern a secure and compliant multi-account AWS environment
 - Automate the setup of your new environment in a few click
@@ -515,9 +546,9 @@ draft: true
     + Advanced metrics and recommendations
         * additional paid metrics and features
         * Advanced metric: activity, advanced cost optimization, advanced data protection, status code
-        + Cloudwatch Publishing: Access metrics in CloudWatch without additional charges
-        + Prefix Aggregation: Collect metrics at the prefix level
-        + Data is available for queries for 15 months
+    + Cloudwatch Publishing: Access metrics in CloudWatch without additional charges
+    + Prefix Aggregation: Collect metrics at the prefix level
+    + Data is available for queries for 15 months
 ### Amazon Fsx
 - Fsx for Windows:
     + Supports SMB and NFTS, Active Directory
@@ -1200,7 +1231,15 @@ draft: true
 - Rule can centrally managed cross-account by AWS Firewall Manager to apply to many VPCs
 - Traffic filtering: allow, drop, alert
 - Send logs of rule matches to S3, CW, Firehose
-
+## Other
+### AWS Workspaces
+- Remote Desktop Service/Citrix
+- Consistent desktop, from anywhere 
+- Monthly, hourly pricing
+- Use Directory Service(Simple, AD, AD Connector) for authentication and user management
+- Use ENI in VPC
+- Connect on-premises over VPN or Direct Connect
+- Workspaces are not HA, they occupy a single az
 ## Machine Learning
 # Kendra
 ![Screenshot](/aws/kendra.png)
@@ -1210,11 +1249,3 @@ draft: true
 - Automatically extracts text, handwriting, data from any scanned data
 # Overview
 ![Screenshot](/aws/ml_overview.png)
-
-- I would like to tell you a'bout a 'very cre'ative 'person that I 'really 'admire. He was William Henry Perkin, the 'scientist who in'vented syn'thetic dyes
-- I can re'member 'correctly that I first knew him when I was a first-year 'student at uni'versity.At that time, while pre'paring for my 'project, I saw an 'article a'bout his life. When Perkin was a child, he took great 'interest in re'search. Later, his 'talent and de'votion to 'chemistry led to his in'ventions. In par'ticular, he spent his va'cation in his la'boratory 'trying to find a 'medical 'treatment for a di'sease. 'Even though he did not suc'ceed, he pro'duced the first syn'thetic dye. This suc'cess made him rich and 'famous but it could not stop him from 'working and in'venting 'many 'other dyes
-- What struck me was that he did not give up 'after the failures of 'thousands of ex'periments and that he 'always tried to make scien'tific in'ventions. The 'story of his life taught me that 'any in'vention is the result of hard work mixed with 'passion
-
-- I would like to tell you a'bout a 'highly in'novative person that I 'greatly 'admire. He was William Henry Perkin, the 'talented 'chemist who in'vented syn'thetic dyes
-- I can re'member 'correctly that I first knew him when I was a freshman at uni'versity.At that time, while con'sulting 'reference ma'terials for my re'search a'ssignment, I came a'cross an 'article a'bout his life. When Perkin was a child, he took great 'interest in re'search. Later, his 'talent and de'votion to 'chemistry was the 'major 'factor con'tributing to his scien'tific 'breakthroughs. In par'ticular, he spent his va'cation in his la'boratory 'trying to find an e'ffective cure for ma'laria. 'Even though he did not suc'ceed, he pro'duced the first syn'thetic dye. This suc'cess made him rich and 'famous but it could not stop him from 'working and in'venting 'many 'other dyes
-- What struck me was that he did not give up 'after the failures of 'thousands of ex'periments and that he 'always tried to make scien'tific in'ventions. The 'story of his life taught me that 'any in'vention is the result of hard work mixed with 'passion
