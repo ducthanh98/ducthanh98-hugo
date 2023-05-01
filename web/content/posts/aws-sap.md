@@ -1,16 +1,9 @@
 ---
 title: "Amazon Solution Architect Professional Note"
 date: 2022-11-28T22:58:35+07:00
-draft: true
+draft: false
 ---
 
-## OSI Model
-### Layer 1
-- Physical shared medium
-- Standards for transmiting and receiving from the medium
-- No access control
-- No device => no device communications
-### Layer 2: Data Link
 
 ### DDOS 
 - Type
@@ -18,15 +11,17 @@ draft: true
     + Protocol Attack: SYN Flood
     + Volumetric: DNS Amplification
 
-
-
 ## Identify and Federation
 ### Policy Priorty
 Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Policies -> Identity Policies
 ### Directory Service
 - AD Connector: Only redirects no local identity data in AWS
 - Simple AD: AD compatible managed on AWS
-- AWS Managed MS AD: Establish trust connection with your on-premise AD
+- AWS Managed MS AD: 
+    + Establish trust connection with your on-premise AD
+    + Support AD Native schema extensions which required by some AD applications
+    + Large userS
+    + Integrates with radius/MFA
 ### IAM:
 - Explicit DENY has precedence over ALOW
 - NotAction: explicit allow a FEW THING in there
@@ -231,9 +226,9 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
     + One policy per access point => Easier to manage than complex bucket policy
     + Restrict access from specific VPC
     + Linked to a specific bucket
-# AWS Shield
+### AWS Shield
 - Ec2, route 53, cloudfront, global accelator, load balancer
-# WAF
+### WAF
 - Deploy on ALB, API Gateway, Cloudfront, Appsync(Grapql)
 - Define Web ACL
 - Protect from common atk - SQL , XSS
@@ -249,9 +244,9 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
     + CW Logs: 5M/sec
     + S3: 5 min interval
     + Kinesis Data Firehose: limited by Firehose quotas
-# Firewall Manager
+### Firewall Manager
 - If you want to use WAF across accounts, accelerate WAF configuration, automate the protection of new resources, use Firewall Manager
-# AWS Inspector
+### AWS Inspector
 - Ec2: 
     + Leverage AWS System Manager(SSm) agent
     + Analyze against unintended network accessibility
@@ -732,6 +727,15 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
     + Take a snap and restore
     + Create new aurora replica from rds instance and promote it 
 ## Service Communication
+### AWS SWF
+- Build workflows - coordination over distributed componnents
+- Predecessor to Step Function - use instances/servers
+- Choose SWF If
+    +  AWS Flow Framework
+    + External signals to intervene in processes
+    + Launch child flows and then returns to parent
+    + Complex decisions - support customer decider
+- Medical Turk
 ### AWS Step Functions
 - Invoke a lambda function
 - Run an AWS Batch, ECS task
@@ -1050,6 +1054,7 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
 - Retire
     + Turn off things you don't need
 - Retain
+    + Do nothing for now
 ### Storage Gateway
 - Bridge between on-premises data and cloud data
 - Types
@@ -1137,6 +1142,12 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
 - Support cross-region and cross-account backups
 ## VPC
 ### Basics
+- NACL: 
+    + Processes in order, lowest rule number first. Once a match occurs, processing stops. 
+    + DENY everything by default
+    + Each subnet can have one NACL
+- Border Gateway Protocol(BGP)
+    + 
 - Public subnets
     + Has a route table that sends 0.0.0.0/0 to an IGW
     + Must have a public ipv4
@@ -1146,6 +1157,19 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
 - VPC Flow logs
     + Can be defined at the VPC level, Subnet, ENI level
     + can be sent to CW and S3
+    + Capture package metadata NOT PACKAGE CONTENT
+    + Applied to VPC - subnet or directly interface
+    + VPC Flow log not realtime
+    + example
+        * 2 123456789010 eni-1235b8ca123456789 172.31.16.139 172.31.16.21 20641 22 6 20 4249 1418530010 1418530070 ACCEPT OK
+        * 2 123456789010 eni-1235b8ca123456789 172.31.9.69 172.31.9.12 49761 3389 6 20 4249 1418530010 1418530070 REJECT OK
+        * 1 = ICMP Protocol, 6 = TCP, 17 = UDP
+
+- Subnet
+    + Every subnet has a vpc router interface
+    + Interfaces use subnet + 1 address
+    + Routes priority: /16 higher = more specific = higher priority
+- 
 ### VPC Peering
 - Connect two VPC, privately using AWS network
 - Must not have overlapping CIDR
@@ -1153,10 +1177,25 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
 ### Transit Gateway
 - Trasitive peering between thousands of VPC and on premises, hub connection
 - Regional resource
+- No route learning/progation across peer. Static routes are required
+- Data is encrypted
 - Share across-account using RAM
 - RouteTables: Limit which VPC can talk with other VPC
 - Work with Direct Connection Gateway, VPN
 - Support IP Multicast
+### Client VPN
+- Split tunnel is NOT the default. It must be enabled else all data goes via tunnel
+- Managed implementation of OpenVPN
+- Billed based on network associations
+### Site to Site VPN
+- Encrypted using IPSec, running over the public internet
+- Quick to provision less than an hour
+- Static connect(without BGP): No balancing and multi connect failover
+- Dynamic: BGP is configured on both on-premises site and aws side.networks are exchanged via bgp
+- Speed Limitation: 1.25GB
+- Latency: inconsistent, public network
+- Cost: aws hourly, all software configuration,... 
+- Can be used as a backup for DX
 ### VPC Endpoint
 - VPC Endpoint Gateway
     + Only works for S3, DynamoDB, must create one gateway per vpc
@@ -1177,6 +1216,14 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
 ### AWS PrivateLink
 - Requires a network load balancer(Service VPC) and ENI(Customer VPC)
 - PrivateLink with DX: Corporate -> DX -> Private VIF -> Private Link -> Gateway Interface -> S3
+### Interface Endpoint
+- Private access to a public AWS Service
+- Added to a specific subnets - an ENI - not HA
+- For HA, add one endpoint to one subnet per AZ
+- Access controller via SG
+- Endpoint policies
+- Only support TCP and IPv4 
+- Uses PrivateLink 
 ### AWS Site to Site VPN
 - Establish
     + On-premise
@@ -1199,11 +1246,13 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
 -  Shared service 
 ### Direct Connection
 - Provides a dedicated private connection from a remote network to your VPC
+- Support BGP and BGP Md5 authentication
+- MACSEC: Security feature
 - Private access to AWS Services through VIF
 - Must setup a failover DX or VIF
 - Virtual Interfaces
     + Public VIF: connect to public AWS Endpoints
-    + Private VIF: connect to a resources in your VPC
+    + Private VIF: connect to a resources in your VPC and VPC needs to be in the same region as the DX location. Using private ASN (64512-65535)
     + Transit Virtual Interface: connect to a resource in your VPC using Transit Gateway
 - VPC ENDPOINTS can't accessed through private VIF
 - Encryption
@@ -1240,6 +1289,10 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
 - Use ENI in VPC
 - Connect on-premises over VPN or Direct Connect
 - Workspaces are not HA, they occupy a single az
+### AWS Global Accelerator
+- Have 2 anycast IP
+- Anycast IP's allow a single IP to be in multiple locations. Routing moves traffic to closest location
+- Can be used for non HTTP/s
 ## Machine Learning
 # Kendra
 ![Screenshot](/aws/kendra.png)
@@ -1249,3 +1302,11 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
 - Automatically extracts text, handwriting, data from any scanned data
 # Overview
 ![Screenshot](/aws/ml_overview.png)
+
+AWS Systems Manager Automation documents to fix non-compliant resources
+The log group and the destination must be in the same AWS Region. However, the destination can point to an AWS resource such as a Kinesis Data Firehose stream that is located in a different Region.
+With an HTTP API direct integration to DynamoDB is not possible but you can connect to multiple Lambda functions and configure methods and paths.
+Create a lifecycle policy for the incomplete multipart uploads on the S3 bucket to prevent new failed uploads from accumulating
+
+
+This mode is a good choice for projects with a clean working directory and a source that is a large Git repository. If you choose this option and your project does not use a Git repository (GitHub, GitHub Enterprise, or Bitbucket), the option is ignored hence this is incorrect.
