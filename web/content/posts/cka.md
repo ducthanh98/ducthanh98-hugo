@@ -5,6 +5,14 @@ draft: true
 ---
 
 # Architecture
+## Overview
+    - Kube-api authenticates user
+    - Kube-api Validates request
+    - Kube-api Retrieves data
+    - Kube-api Updates etcd
+    - Scheduler
+    - Kubelet
+
 ## Master Node: 
     - Responsible for managing the K8s cluster, storing information about the nodes, containers, ...
 ### ETCD:
