@@ -109,3 +109,84 @@ kubectl cordon <node>
         + All at once
         + One node at time
         + Replace old node with new node
+### Backup
+- Resource Configurations
+    - 
+- ETCD Cluster
+    - Restore
+    ```
+    ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/etcd/pki/ca.pem --cert=/etc/etcd/pki/etcd.pem --key=/etc/etcd/pki/etcd-key.pem snapshot restore /root/cluster2.db --data-dir <dir>
+    ```
+    - Backup
+    ```
+    ETCDCTL_API=3 etcdctl --endpoints=https://192.13.40.18:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /<dir>
+    ```
+### Certificate API
+- Create CertificateSigningRequest
+```
+    openssl genrsa -out <name.key> 2048
+    openssl req -new-key <name.key> -subj "/CN=jane" -out jane.csr
+
+    cat <name.csr> | base64 |tr -d "\n"
+
+```
+```
+-- csr file yaml example
+---
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: <user>
+spec:
+  request: <base64 here>
+  signerName: kubernetes.io/kube-apiserver-client
+  usages:
+  - client auth
+
+```
+- Review requests
+```
+kubectl get csr
+```
+- Approve requests
+```
+kubectl certificate approve/deny <name>
+```
+- Shares certs to users
+
+### Kube Config
+## Storage
+### Persistent volume
+- PV
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-log
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 100Mi
+  hostPath:
+    path: /pv/log
+    type: DirectoryOrCreate
+  persistentVolumeReclaimPolicy: Retain
+```
+- pvc
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim-log-1
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Mi
+```
+### Storage class:
+- Support for dynamic provisioning
+## Networking
+### Switching
