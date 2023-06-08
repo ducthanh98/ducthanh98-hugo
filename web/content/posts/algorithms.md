@@ -214,3 +214,56 @@ func main() {
 
 }
 ```
+### Singleton
+- is a creational design pattern that lets you ensure that a class has only one instance, while providing a global access point to this instance.
+- Pros
+    +  You can be sure that a class has only a single instance.
+    + The singleton object is initialized only when it’s requested for the first time.
+- Const
+    + The pattern requires special treatment in a multithreaded environment so that multiple threads won’t create a singleton object several times.
+```
+var lock = &sync.Mutex{}
+
+type single struct {
+}
+
+var singleInstance *single
+
+func getInstance() *single {
+    if singleInstance == nil {
+        lock.Lock()
+        defer lock.Unlock()
+        if singleInstance == nil {
+            fmt.Println("Creating single instance now.")
+            singleInstance = &single{}
+        } else {
+            fmt.Println("Single instance already created.")
+        }
+    } else {
+        fmt.Println("Single instance already created.")
+    }
+
+    return singleInstance
+}
+```
+
+### Prototype
+- Prototype is a creational design pattern that lets you copy existing objects without making your code dependent on their classes
+```
+type Inode interface {
+    print(string)
+    clone() Inode
+}
+
+type File struct {
+    name string
+}
+
+func (f *File) print(indentation string) {
+    fmt.Println(indentation + f.name)
+}
+
+func (f *File) clone() Inode {
+    return &File{name: f.name + "_clone"}
+}
+```
