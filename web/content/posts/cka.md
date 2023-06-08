@@ -109,6 +109,148 @@ kubectl cordon <node>
         + All at once
         + One node at time
         + Replace old node with new node
+
+## Security
+### Resources and Verbs
+```
+kubectl api-resources --sort-by name -o wide
+```
+### RBAC
+
+### Cluster Role
+- Assign role
+```
+k create clusterrole <name> --resources=nodes --verb get,watch,list,get,create,delete
+k create clusterrolebinding <name> --user michelle --clusterrole node-admin 
+```
+- check permission
+```
+kubectl auth can-i list storageclasses --as michelle
+```
+
+```
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: storage-admin
+rules:
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["get", "watch", "list", "create", "delete"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "watch", "list", "create", "delete"]
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: michelle-storage-admin
+subjects:
+- kind: User
+  name: michelle
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: storage-admin
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### Service Account
+- 
+```
+kubectl create serviceaccount dashboard-sa
+k create token dashboard-sa
+```
+- Set service account by cmd
+```
+kubectl set serviceaccount deploy/web-dashboard dashboard-sa
+```
+### Image security
+- Command
+```
+kubectl create secret docker-registry regcred --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+
+kubectl get secret regcred --output=yaml
+```
+- Inspecting
+```
+kubectl get secret regcred --output=yaml
+```
+### Docker Security
+-  Unlike virtual machines, containers are not completely isolated from their host.Containers and the host share the same kernel.
+- Containers are isolated using namespaces in Linux. The host has a namespace and the containers have their own namespace. All the processes run by the containers are in fact run on the host itself but in their own namespace. As far as the Docker container is concerned, it is in its own namespace
+- By default, Docker runs a container with a limited set of capabilities. And so the processes running within the container do not have the privileges to say reboot the host or perform operations that can disrupt the host or other containers running on the same host.
+- Docker capabilities
+```
+docker run --cap-add MAC-ADMIN ubuntu
+docker run --cap-drop KILL ubuntu
+docker run --privilleged KILL ubuntu
+```
+### Security Context
+- Put below data into containers details
+ ```
+ securityContext:
+   runAsUser: 1000
+   capabilities:
+     add: ["MAC_ADMIN"]
+ ```
+
+### Traffic
+- Ingress: Ingoing
+- Egress: Outgoing
+- k8S allow any traffics from any pods in cluster
+- Networking policy YAML 
+```
+
+```
+- Solutions that support network policies
+    - Kube-router
+    - Calico
+    - Romana
+    - Weave-net
+- Not Support:
+    - Flannel
+- Example yaml file
+```
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: internal-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      name: internal
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+    - {}
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          name: mysql
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  - to:
+    - podSelector:
+        matchLabels:
+          name: payroll
+    ports:
+    - protocol: TCP
+      port: 8080
+
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+```
 ### Backup
 - Resource Configurations
     - 
@@ -190,3 +332,24 @@ spec:
 - Support for dynamic provisioning
 ## Networking
 ### Switching
+### DNS
+- Name resolution: Transalating hostname to IP address
+- Append this option into /etc/resolv.conf so server can query from dns server
+```
+nameserver 192.168.1.100
+```
+### Docker networking
+- Network: none containers can't connect each other or outside the world
+- Network: host 
+- Network: bridge 
+  + 
+### CNI
+### IPAM
+- Weave, by default, allocates the IP range 10.32.0.0/12 for the entire network.
+- From this range, the peers decide to split the IP addresses equally between them and assigns one portion to each node.
+### Service Networking
+- When a service is created, it is accessible from all pods on the cluster, irrespective of what nodes the pods are on.While a pod is hosted on a node, a service is hosted across the cluster. It is not bound to a specific node,but remember, the service is only accessible from within the cluster. This type of service is known as ClusterIP.
+- Similarly, each node runs another component known as kube-proxy. kube-proxy watches the changes in the cluster through Kube API server,and every time a new service is to be created,kube-proxy gets into action.Unlike pods, services are not created on each node or assigned to each node. Services are a cluster-wide concept. They exist across all the nodes in the cluster.
+
+
+### DNS in K8s
