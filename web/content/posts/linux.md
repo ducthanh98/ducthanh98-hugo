@@ -3,10 +3,8 @@ title: "Linux"
 date: 2023-11-12T22:53:02+07:00
 draft: true
 ---
-
 # Processes
 ## Concept
-- 
 - A running instance of a program is called a process and it runs in its own memory space. Each time you execute a command, a new process starts. An active processs also includes the resources the program needs to run. These resources are are managed by the operating system(heap, process registers, program counters)
 - Each process has its own memory adress space and one process cannot corrupt the memory space of another process. 
 
@@ -33,3 +31,6 @@ draft: true
 - Context switching is really expensive. It involves saving and loading of registers, switching out memory of pages and updating various kernal data structures.
 - Switching execution between threads also requires context switching but it's faster because there are few state to track and there is no need to switch out virtual memory pages which is one of the most expensive operations during a context switch.
 - Some other mechanisms: fiber or coroutine
+# Cron
+## Anacron: 
+# Mount disk
