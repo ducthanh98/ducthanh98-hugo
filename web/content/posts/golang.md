@@ -6,23 +6,17 @@ draft: true
 
 # Garbage collection
 ```
-In Go (Golang), automatic memory management is handled by a garbage collector. The garbage collector is responsible for reclaiming memory that is no longer in use, preventing memory leaks and allowing developers to focus on writing code without explicit memory deallocation.
+The garbage collector, or GC, is a system designed specifically to identify and free dynamically allocated memory.
 
-Here are some key points about the garbage collector in Go:
+Go uses a garbage collection algorithm based on tracing and the Mark and Sweep algorithm. During the marking phase, the garbage collector marks data actively used by the application as live heap(It first marks all live objects by traversing the object graph, starting from the roots). Then, during the sweeping phase, the GC traverses all the memory not marked as live and reuses it. 
 
-1. Concurrency: Go's garbage collector is concurrent, meaning it runs concurrently with the application code. This concurrency helps in minimizing pauses and improving the overall performance of the application.
+The garbage collector’s work is not free, as it consumes two important system resources: CPU time and physical memory.
 
-2. Tracing Garbage Collector: Go uses a tracing garbage collector. It works by tracing through the memory from the root objects (global variables, stack frames, etc.) to identify and mark objects that are still reachable (live objects). The unreachable objects are then considered garbage and can be safely deallocated.
-
-3. Generational Garbage Collection: Go's garbage collector uses a generational garbage collection algorithm. It divides objects into multiple generations based on their age. Young objects are collected more frequently, while older objects are collected less frequently.
-
-4. Mark and Sweep: The garbage collector follows a mark-and-sweep algorithm. It first marks all live objects by traversing the object graph, starting from the roots. After marking, it sweeps through the memory, deallocating memory occupied by unmarked (garbage) objects.
-
-Memory Reclamation: The garbage collector reclaims memory by compacting the heap. It moves objects closer together, reducing fragmentation and improving memory utilization.
-
-Tuning: Go provides some tunable parameters to adjust the garbage collector's behavior based on the application's needs. For example, you can adjust the size of the heap or the garbage collection latency.
-
-GOMAXPROCS: The GOMAXPROCS environment variable or the runtime.GOMAXPROCS() function can be used to set the maximum number of CPUs that the Go runtime can use for garbage collection and other concurrent operations.
+The memory in the garbage collector consists of the following:
+- Live heap memory (memory marked as “live” in the previous garbage collection cycle)
+- New heap memory (heap memory not yet analyzed by the garbage collector)
+- Memory is used to store some metadata, which is usually insignificant compared to the first two entities.
+The CPU time consumption by the garbage collector is related to its working specifics. There are garbage collector implementations called “stop-the-world” that completely halt program execution during garbage collection. In the case of Go, the garbage collector is not fully “stop-the-world” and performs most of its work, such as heap marking, in parallel with the application execution.
 ```
 
 # Go routine
