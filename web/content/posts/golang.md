@@ -3,7 +3,31 @@ title: "Golang"
 date: 2023-12-23T09:40:49+07:00
 draft: true
 ---
+# Array vs slices
+n Go, arrays and slices are both used to store collections of elements, but they have some key differences. Here's a comparison between the two:
 
+- Fixed Size vs. Dynamic Size:
+
+Arrays: Have a fixed size determined at compile time. Once declared, the size cannot be changed.
+Slices: Are dynamically sized and can grow or shrink. Slices are references to sections of arrays.
+
+- Access:
+
+Arrays: Accessed using index notation. Indexes start from 0. For example:
+Slices: Also accessed using index notation. Slices can be sliced to get a subset of elements. 
+- Passing to Functions:
+Arrays: When passed to functions, the entire array is copied, which can be inefficient for large arrays.
+Slices: Passing slices to functions is more efficient because only a reference to the underlying array is copied, not the entire data. This allows for more efficient manipulation of data.
+- Appending:
+Arrays: Cannot be appended to. Their size is fixed.
+Slices: Can be appended to using the append function. If the underlying array is not large enough to accommodate the new elements, a new larger array is allocated and the elements are copied over.
+- Length and Capacity:
+
+Slices: Have both a length and a capacity. The length is the number of elements in the slice, and the capacity is the maximum number of elements the slice can hold without allocating more memory.
+- Usage:
+
+Arrays: Used when the size of the collection is fixed and known at compile time.
+Slices: Used when the size of the collection may vary at runtime or when passing portions of arrays to functions.
 # Garbage collection
 ```
 The garbage collector, or GC, is a system designed specifically to identify and free dynamically allocated memory.
