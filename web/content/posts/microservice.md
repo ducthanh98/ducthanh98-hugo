@@ -49,3 +49,5 @@ draft: false
     + It enables an application to maintain data consistency across multiple services without using distributed transactions
 - Drawbacks
     + The programming model is more complex. For example, a developer must design compensating transactions that explicitly undo changes made earlier in a saga.
+# Transactional Outbox pattern
+- A service command typically needs to create/update/delete aggregates in the database and send messages/events to a message broker.
