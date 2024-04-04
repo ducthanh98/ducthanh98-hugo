@@ -11,8 +11,17 @@ draft: false
 - Kafka is best used for streaming from A to B without resorting to complex routing, but with maximum throughput
 - Use RabbitMQ with long-running tasks, reliably running background jobs, and communication/integration between and within applications.
 
+# Shared database
+- Use a (single) database that is shared by multiple services
+- Benefits
+    + A developer uses familiar and straightforward ACID transactions to enforce data consistency
+    + A single database is simpler to operate
+- Drawbacks
+    + Development time coupling - a developer working on, for example, the OrderService will need to coordinate schema changes with the developers of other services that access the same tables. This coupling and additional coordination will slow down development.
+    + Runtime coupling - because all services access the same database they can potentially interfere with one another. For example, if long running CustomerService transaction holds a lock on the ORDER table then the OrderService will be blocked.
+    + Single database might not satisfy the data storage and access requirements of all services.
 
-# Saga
+# Database per services
 - Different services have different data storage requirements. For some services, a relational database is the best choice. Other services might need a NoSQL database such as MongoDB, which is good at storing complex, unstructured data, or Neo4J, which is designed to efficiently store and query graph data.
 - Benefits
     + ensure that the services are loosely coupled. Changes to one service’s database does not impact any other services.

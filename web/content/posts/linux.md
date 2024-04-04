@@ -3,6 +3,7 @@ title: "Linux"
 date: 2023-11-12T22:53:02+07:00
 draft: true
 ---
+
 # Processes
 ## Concept
 - A running instance of a program is called a process and it runs in its own memory space. Each time you execute a command, a new process starts. An active processs also includes the resources the program needs to run. These resources are are managed by the operating system(heap, process registers, program counters)
