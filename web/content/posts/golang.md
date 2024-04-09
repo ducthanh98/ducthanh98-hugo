@@ -1,7 +1,7 @@
 ---
 title: "Golang"
 date: 2023-12-23T09:40:49+07:00
-draft: true
+draft: false
 ---
 # Panic vs recover
 - To handle panics and recover from them in Go, the built-in panic() and recover() functions can be used. When an error occurs, panic() is called and the program execution stops. You can use the defer statement to call recover(), which stops the panic and resumes execution from the point of the nearest enclosing function call, after all deferred functions have been run.
