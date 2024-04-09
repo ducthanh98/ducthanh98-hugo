@@ -353,3 +353,25 @@ nameserver 192.168.1.100
 
 
 ### DNS in K8s
+
+# Compare with docker swarm
+
+While Docker Swarm offers a simpler networking model compared to Kubernetes, there are certain advanced networking features and use cases where Kubernetes outshines Docker Swarm. Here are some cases where Docker Swarm networking might fall short when compared to Kubernetes:
+
+- Fine-grained Network Policies:
+
+Kubernetes supports network policies that allow you to define rules for how pods can communicate with each other and other network endpoints. These policies enable fine-grained control over network traffic based on labels, namespaces, and other attributes. Docker Swarm does not offer native support for such fine-grained network policies, making it more challenging to implement strict network segmentation and access controls.
+- Advanced Load Balancing and Ingress Controllers:
+
+Kubernetes has a rich ecosystem of load balancers and ingress controllers that provide advanced traffic management features, including SSL termination, path-based routing, and header-based routing. While Docker Swarm provides built-in load balancing capabilities, it lacks the extensive features offered by Kubernetes' ecosystem of Ingress controllers like Nginx Ingress Controller, Traefik, or HAProxy Ingress.
+- Service Mesh Integration:
+
+Kubernetes has strong support for service mesh technologies like Istio and Linkerd, which enable advanced features such as traffic shaping, observability, and security at the service-to-service level. These features are essential for microservices architectures. While it's possible to integrate service mesh with Docker Swarm, Kubernetes has better support and integration due to its widespread adoption and larger community.
+- Dynamic IP Assignment and DNS for Pods:
+
+Kubernetes assigns each pod a unique IP address and DNS name, allowing for seamless communication between pods within the cluster. Docker Swarm also provides DNS-based service discovery, but it does not assign individual IP addresses to pods by default. This might limit certain use cases where direct communication between pods with unique IPs is necessary.
+- Third-party Networking Plugins and Integrations:
+
+Kubernetes has a broader ecosystem of third-party networking plugins and integrations, such as Calico, Flannel, and Cilium, which offer various networking features and performance optimizations. While Docker Swarm supports some networking plugins, Kubernetes' ecosystem is more mature and diverse, providing users with more options and flexibility to tailor networking solutions to their specific needs.
+
+In summary, while Docker Swarm provides a straightforward networking model suitable for many use cases, Kubernetes offers more advanced networking features and integrations, making it better suited for complex microservices architectures and environments requiring fine-grained network control and observability.
