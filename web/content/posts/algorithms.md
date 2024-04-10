@@ -3,44 +3,16 @@ title: "Algorithms"
 date: 2023-05-01T22:43:50+07:00
 draft: true
 ---
-# Bitmanipulation
-## Binary AND &
-```
-0 & 0 = 0
-0 & 1 = 0
-1 & 0 = 0
-1 & 1 = 1
+# SOLID
+- Single Responsibility Principle (SRP): A class should have only one reason to change. In other words, a class should have only one responsibility or job. This principle promotes high cohesion and reduces coupling by ensuring that each class focuses on doing one thing well.
 
- Example: 5 & 7 => 0000101 & 0000111 = 0000101 => 5
-```
-## Binary OR |
-```
-0 | 0 = 0
-0 | 1 = 1
-1 | 0 = 1
-1 | 1 = 1
-```
-## Binary XOR ^
-```
-0 ^ 0 = 0
-0 ^ 1 = 1
-1 ^ 0 = 1
-1 ^ 1 = 0
-```
-## Binary NOT ~
-```
-~ 0 = 1
-~ 1 = 0
-```
-## Binary LEFT SHIFT <<
-```
-a << b => a * power(2,b)
-```
+- Open/Closed Principle (OCP): Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification. This means that you should be able to extend the behavior of a module without modifying its source code. This principle is often achieved through the use of inheritance, composition, and polymorphism.
 
-## Binary RIGHT SHIFT >>
-```
-a >> b => a / power(2,b)
-```
+- Liskov Substitution Principle (LSP): Subtypes should be substitutable for their base types without altering the correctness of the program. In simpler terms, objects of a superclass should be replaceable with objects of its subclass without affecting the functionality of the program.
+
+- Interface Segregation Principle (ISP): Clients should not be forced to depend on interfaces they don't use. This principle encourages the creation of fine-grained, client-specific interfaces rather than large, general-purpose interfaces. It helps prevent the problem of "interface bloat" and minimizes the impact of changes.
+
+- Dependency Inversion Principle (DIP): High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions. This principle encourages decoupling between modules by relying on abstractions (such as interfaces or abstract classes) rather than concrete implementations.
 # Design pattern
 ## Creational patterns
 ### Factory Pattern:
@@ -266,4 +238,89 @@ func (f *File) print(indentation string) {
 func (f *File) clone() Inode {
     return &File{name: f.name + "_clone"}
 }
+```
+## Structural patterns
+### Decorator pattern
+- structural design pattern that lets you attach new behaviors to objects by placing these objects inside special wrapper objects that contain the behaviors.
+```
+type TomatoTopping struct {
+    pizza IPizza
+}
+
+func (c *TomatoTopping) getPrice() int {
+    pizzaPrice := c.pizza.getPrice()
+    return pizzaPrice + 7
+}
+
+type CheeseTopping struct {
+    pizza IPizza
+}
+
+func (c *CheeseTopping) getPrice() int {
+    pizzaPrice := c.pizza.getPrice()
+    return pizzaPrice + 10
+}
+```
+### Adapter pattern
+- Adapter is a structural design pattern that allows objects with incompatible interfaces to collaborate.
+```
+type Computer interface {
+    InsertIntoLightningPort()
+}
+
+type Mac struct {
+}
+
+func (m *Mac) InsertIntoLightningPort() {
+    fmt.Println("Lightning connector is plugged into mac machine.")
+}
+
+type Windows struct{}
+
+func (w *Windows) insertIntoUSBPort() {
+    fmt.Println("USB connector is plugged into windows machine.")
+}
+
+type WindowsAdapter struct {
+    windowMachine *Windows
+}
+
+func (w *WindowsAdapter) InsertIntoLightningPort() {
+    fmt.Println("Adapter converts Lightning signal to USB.")
+    w.windowMachine.insertIntoUSBPort()
+}
+
+```
+## Behavioral Design pattern
+### Command pattern
+- a behavioral design pattern that turns a request into a stand-alone object that contains all information about the request. This transformation lets you pass requests as a method arguments, delay or queue a request’s execution, and support undoable operations.
+
+### Strategy pattern
+- Strategy is a behavioral design pattern that lets you define a family of algorithms, put each of them into a separate class, and make their objects interchangeable.
+```
+package main
+
+type EvictionAlgo interface {
+    evict(c *Cache)
+}
+
+type Fifo struct {
+}
+
+func (l *Fifo) evict(c *Cache) {
+    fmt.Println("Evicting by fifo strtegy")
+}
+
+
+```
+## Observer pattern
+- Observer is a behavioral design pattern that lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they’re observing.
+```
+type Subject interface {
+    register(observer Observer)
+    deregister(observer Observer)
+    notifyAll()
+}
+
+
 ```
