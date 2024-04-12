@@ -4,15 +4,16 @@ date: 2023-05-01T22:43:50+07:00
 draft: true
 ---
 # SOLID
-- Single Responsibility Principle (SRP): A class should have only one reason to change. In other words, a class should have only one responsibility or job. This principle promotes high cohesion and reduces coupling by ensuring that each class focuses on doing one thing well.
+- Single Responsibility Principle (SRP): A class should have only one reason to change. In other words, a class should have only one responsibility or job.
 
-- Open/Closed Principle (OCP): Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification. This means that you should be able to extend the behavior of a module without modifying its source code. This principle is often achieved through the use of inheritance, composition, and polymorphism.
+- Open/Closed Principle (OCP): Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification .
 
-- Liskov Substitution Principle (LSP): Subtypes should be substitutable for their base types without altering the correctness of the program. In simpler terms, objects of a superclass should be replaceable with objects of its subclass without affecting the functionality of the program.
+- Liskov Substitution Principle (LSP):  In simpler terms, objects of a superclass should be replaceable with objects of its subclass without affecting the functionality of the program.
 
-- Interface Segregation Principle (ISP): Clients should not be forced to depend on interfaces they don't use. This principle encourages the creation of fine-grained, client-specific interfaces rather than large, general-purpose interfaces. It helps prevent the problem of "interface bloat" and minimizes the impact of changes.
+- Interface Segregation Principle (ISP):  This principle encourages the creation of fine-grained, client-specific interfaces rather than large, general-purpose interfaces.
 
-- Dependency Inversion Principle (DIP): High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions. This principle encourages decoupling between modules by relying on abstractions (such as interfaces or abstract classes) rather than concrete implementations.
+- Dependency Inversion Principle (DIP): High-level modules should not depend on low-level modules. This principle encourages decoupling between modules by relying on abstractions (such as interfaces or abstract classes) rather than concrete implementations.
+
 # Design pattern
 ## Creational patterns
 ### Factory Pattern:

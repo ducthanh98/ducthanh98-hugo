@@ -215,3 +215,5 @@ func main() {
     printer(sqr)
 }
 ```
+# Go scheduler
+The Go scheduler is responsible for managing goroutines, the lightweight threads of execution in Go. It follows an M:N threading model, multiplexing a large number of goroutines onto a smaller number of operating system threads. The scheduler uses a work-stealing algorithm to balance workload among threads and supports preemption to ensure fair scheduling. Developers can control the maximum number of OS threads using the GOMAXPROCS environment variable.

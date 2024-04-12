@@ -10,6 +10,28 @@ draft: false
 ## Use cases
 - Kafka is best used for streaming from A to B without resorting to complex routing, but with maximum throughput
 - Use RabbitMQ with long-running tasks, reliably running background jobs, and communication/integration between and within applications.
+## Rabbitmq exchanges && binding
+- Direct Exchange:
+    + Each message is routed to one or more queues whose binding key exactly matches the routing key of the message
+- Fanout Exchange:
+    + Routes messages to all queues bound to the exchange, regardless of the routing key.
+- Topic Exchange
+    + Routes messages to queues based on wildcard matches between the routing key of the message and the routing patterns specified when the queue was bound to the exchange.
+- Headers Exchange:
+    - Routes messages based on message header attributes rather than routing keys.
+- Binding:
+Binding is the link between an exchange and a queue. It defines the relationship between the exchange and the queue, including the routing key or pattern used for routing messages from the exchange to the queue.
+## Kafka  zero copy
+- Zero copy is a technique used in computer systems to transfer data between different memory locations or devices without the need for unnecessary copying of data. In essence, zero copy eliminates the intermediate step of copying data from one buffer to another, reducing CPU overhead, memory usage, and improving overall system performance.
+
+- Traditional Copying: In traditional data transfer operations, when data needs to be moved from one memory location to another or from a storage device to memory, the data is typically copied from the source buffer to an intermediate buffer, and then to the destination buffer.
+This process involves multiple memory copy operations, which consume CPU cycles and memory bandwidth.
+- Zero Copy: 
+    + With zero copy, instead of copying data from the source buffer to an intermediate buffer and then to the destination buffer, the data is transferred directly from the source to the destination without intermediate copying.
+    + This is achieved by leveraging operating system features such as scatter-gather I/O, memory-mapped I/O, or direct memory access (DMA).
+    + The source and destination buffers are mapped to the same physical memory or are accessible by the same I/O controller, allowing data to be transferred directly between them without involving the CPU.
+    + Zero copy reduces CPU overhead, memory usage, and latency, resulting in improved performance and efficiency, especially in scenarios where large amounts of data need to be transferred quickly, such as network communication, file I/O, or inter-process communication.
+Zero copy is widely used in various systems and applications, including networking (e.g., TCP/IP stack), file systems (e.g., file read/write operations), database systems, and high-performance computing. It enables efficient data transfer and improves system scalability, particularly in high-throughput environments.
 
 # Shared database
 - Use a (single) database that is shared by multiple services
@@ -51,3 +73,21 @@ draft: false
     + The programming model is more complex. For example, a developer must design compensating transactions that explicitly undo changes made earlier in a saga.
 # Transactional Outbox pattern
 - A service command typically needs to create/update/delete aggregates in the database and send messages/events to a message broker.
+
+# Event Sourcing
+-  Event sourcing persists the state of a business entity such an Order or a Customer as a sequence of state-changing events. Whenever the state of a business entity changes, a new event is appended to the list of events. Since saving an event is a single operation, it is inherently atomic. The application reconstructs an entity’s current state by replaying the events.
+
+# Deployment Strategies
+- Recreate Deployment Strategy
+    + we stop and then recreate the application
+- Blue-Green Deployment
+    + The original, old version is called blue environment, and the new updated version is called green environment.Now, both environments are running our application, but the users are still using the old version
+- Rolling Update
+    + Firstly, we create a new instance that runs the updated version. 
+    + After this, we remove one from the instances that run the old version
+- Canary Deployment
+    + only a small part of the users receive the update
+- A/B Testing
+    + This process deploys the update to a subset of users, just like canary deployments. However, A/B testing is mainly about getting feedback from the users about our changes
+- Shadow Deployment
+    + Shadow deployment is similar to blue-green deployment in the sense that it uses two identical environments
