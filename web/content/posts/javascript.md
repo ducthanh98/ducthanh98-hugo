@@ -226,5 +226,95 @@ ngAfterViewChecked: Called after the component’s view (and child views) has be
 
 ngOnDestroy: Called just before Angular destroys the component. This is where you can perform cleanup, like unsubscribing from observables or detaching event handlers.
 
+---
+
+# State Management: Redux vs Context API
+
+- **Context API**: Built into React. Best for low-frequency, global state (e.g. current user theme, authenticated user profile, locale).
+  - *Trade-off*: When a Context Provider's value updates, **all** consumer components re-render unless wrapped in granular providers or memoization.
+- **Redux**: Dedicated state management library with a centralized store, strict unidirectional data flow, and immutable state updates.
+  - *Advantage*: Components subscribe to specific slices of state using `useSelector`. Components only re-render when their selected slice changes, optimizing performance for large-scale applications.
+
+## Redux Middleware: Thunk vs Saga
+Middleware intercepts dispatched actions before they reach the reducer:
+- **Redux Thunk**: Allows action creators to return a function `(dispatch, getState)` instead of a plain action object. Ideal for standard async calls (REST API requests).
+- **Redux Saga**: Leverages ES6 Generator functions (`yield`, `takeEvery`, `call`, `put`) to manage complex async side effects, race conditions, debouncing, and retries.
+
+## Redux Data Flow:
+1. **Action Creation**: UI components dispatch an action describing the event: `{ type: 'cart/addItem', payload: item }`.
+2. **Action Dispatching**: Action is dispatched to the centralized Redux store.
+3. **Middleware**: Thunk/Saga handles async operations or logging if applicable.
+4. **Reducer Processing**: Pure reducer functions take `(previousState, action)` and return a new state snapshot.
+5. **Component Update**: Subscribed UI components re-render with the updated state slice.
+
+---
+
+# Internationalization (i18n) in React
+
+Internationalization allows frontend applications to support multiple languages dynamically.
+
+## Implementation with `react-i18next`
+
+### 1. Configuration (`src/i18n.js`):
+```javascript
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+const resources = {
+  en: {
+    translation: {
+      greeting: "Hello, World!",
+      welcome: "Welcome to our application!",
+      button: { submit: "Submit" }
+    }
+  },
+  vi: {
+    translation: {
+      greeting: "Xin chào!",
+      welcome: "Chào mừng bạn đến với ứng dụng!",
+      button: { submit: "Xác nhận" }
+    }
+  }
+};
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: "vi",
+    fallbackLng: "en",
+    interpolation: { escapeValue: false }
+  });
+
+export default i18n;
+```
+
+### 2. Usage in Components (`src/App.js`):
+```javascript
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+const App = () => {
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
+  return (
+    <div>
+      <h1>{t('greeting')}</h1>
+      <p>{t('welcome')}</p>
+      <button onClick={() => changeLanguage('vi')}>Tiếng Việt</button>
+      <button onClick={() => changeLanguage('en')}>English</button>
+      <button>{t('button.submit')}</button>
+    </div>
+  );
+};
+
+export default App;
+```
+
+
 
 

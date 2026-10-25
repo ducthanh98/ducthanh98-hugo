@@ -175,3 +175,53 @@ Client                                                Server
 - **Pros**: Intelligent routing, SSL/TLS termination, rate limiting, path-based routing.
 - **Cons**: Higher CPU and latency overhead due to decrypting and buffering payloads.
 - **Examples**: AWS ALB (Application Load Balancer), Nginx, Traefik, Envoy Proxy.
+
+---
+
+# Web Security & Authentication: OAuth 2.0 & Tokens
+
+## OAuth 2.0 Authorization Code Grant Flow
+OAuth 2.0 is an authorization framework that enables third-party applications to obtain limited access to an HTTP service on behalf of a resource owner.
+
+```
++----------+
+| Resource |
+|   Owner  |
+|  (User)  |
++----------+
+     ^
+     |
+    (1) User logs in and approves consent
+     |
+     v
++----------+          (2) Authorization Code          +---------------+
+|  Client  | ---------------------------------------> | Authorization |
+| App (SPA |                                          |    Server     |
+|  / BE)   | <--------------------------------------- | (Auth0/Google)|
++----------+          (3) Access Token + Refresh      +---------------+
+     |
+    (4) API Request with Bearer Token
+     v
++---------------+
+|   Resource    |
+|  Server (API) |
++---------------+
+```
+
+### Steps in the Authorization Code Flow:
+1. **User Authorization**: User clicks "Login with Google/GitHub", is redirected to the Auth Server, enters credentials, and consents to permissions.
+2. **Authorization Code**: The Auth Server redirects the user back to the application's redirect URI with a temporary **Authorization Code** (single-use, short TTL).
+3. **Token Exchange**: The application backend securely exchanges the authorization code + client secret for an **Access Token** and an optional **Refresh Token**.
+4. **Resource Access**: The application queries protected APIs by including `Authorization: Bearer <access_token>` in HTTP headers.
+
+## Access Token vs Refresh Token
+- **Access Token**:
+  - Short-lived credential (e.g. 15 to 60 minutes).
+  - Used to authorize API calls against resource servers.
+  - Commonly structured as a **JWT (JSON Web Token)**: `Header.Payload.Signature`.
+  - Stateless verification: API gateways verify the token's cryptographic signature without querying the Auth database on every request.
+- **Refresh Token**:
+  - Long-lived credential (e.g. 7 days to months) stored securely (e.g. HTTP-only secure cookie).
+  - Used strictly against the Auth Server to obtain a fresh access token without forcing the user to re-authenticate when the access token expires.
+  - Refresh Token Rotation: Each time a refresh token is used, a new refresh token is issued, invalidating the old one to prevent replay attacks if compromised.
+

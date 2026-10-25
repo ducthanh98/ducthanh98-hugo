@@ -33,3 +33,30 @@ My experience in developing scalable applications and my problem-solving skills 
 # Why you leave your company?
 I haved worked for VPbank 2 years, and I currently realize I can't improve myself. So i want to find another environment to develop my skills
 
+# Key Contributions & Leadership
+- **Architecture Design**: Helped the team design scalable backend microservice architectures and select optimal technologies.
+- **Code Quality**: Conducted regular code reviews to enforce best practices, clean code, and maintainability.
+- **Mentorship**: Mentored junior developers, helping them improve their engineering skills through code reviews and knowledge sharing.
+- **Cross-functional Collaboration**: Collaborated closely with Product Owners to prioritize and plan sprints, ensuring technical execution aligns with business value.
+- **Reliability & Debugging**: Worked closely with cross-functional teams to resolve production bugs and enhance system stability.
+
+# How do you handle urgent tasks inserted mid-sprint?
+- **Communicate with the Product Owner**: Clarify the business impact and priority of the new task compared to existing sprint commitments.
+- **Trade-off & Scope Negotiation**: Propose swapping the new task with an existing lower-priority story to protect the sprint goal.
+- **Task Decomposition**: If the deadline cannot move, break the task down into smaller increments and deliver the highest-priority, high-value components first.
+- **Team Bandwidth**: Avoid chronic overtime; evaluate if the task size is realistic and maintain sustainable team velocity.
+
+# How do you evaluate and recommend new technologies to a team or client?
+- **Business & Project Requirements**: Thoroughly understand the business problem and determine if existing tools in the stack can already solve it.
+- **Client & Infrastructure Alignment**: Inquire about the customer's current tech stack, operational capabilities, and security constraints to recommend a compatible solution.
+- **Proof of Concept (PoC)**: Build a time-boxed PoC to validate performance, developer ergonomics, and potential risks before full adoption.
+- **Team Capability & Learning Curve**: Assess whether the team is familiar with the technology, and calculate the onboarding and training time required.
+- **Total Cost of Ownership (TCO)**: Factor in licensing, cloud infrastructure costs, maintenance overhead, and community support longevity.
+
+# Agile & Scrum Workflow
+- **Sprint Cycles**: Work is divided into time-boxed cycles (sprints), typically lasting 1 to 2 weeks.
+- **Sprint Planning**: Team estimates stories (using story points) and commits to a realistic sprint backlog aligned with the Sprint Goal.
+- **Daily Standup**: Brief 15-minute sync focusing on: what was completed yesterday, what is planned today, and identifying blockers.
+- **Sprint Review & Retrospective**: Demo working software to stakeholders and discuss process improvements for continuous team growth.
+
+

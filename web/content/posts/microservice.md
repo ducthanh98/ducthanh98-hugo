@@ -207,3 +207,78 @@ Saga sẽ giúp bạn chia nhỏ các giao dịch phức tạp, và mỗi bướ
 
 Một bounded context = 1 microservice.
 Mỗi service có model dữ liệu riêng, không chia sẻ DB.
+
+---
+
+# Event-Driven Architecture vs Synchronous Microservices
+
+## Traditional Synchronous Architecture
+Relies on direct, blocking RPC or HTTP/REST calls between services (Service A calls Service B and waits for response before proceeding).
+
+- **Pros**:
+  - Easier to understand and debug: Linear execution flow and clear stack traces.
+  - Straightforward error handling: Errors are immediately returned to the caller.
+  - Strong data consistency: Synchronous calls make ACID and two-phase commits simpler.
+- **Cons**:
+  - Cascading failures: If downstream Service C fails, Service A and B may block and crash (Single Point of Failure).
+  - Scalability bottleneck: High latency under peak load as threads wait on I/O.
+  - Tight temporal coupling: All services must be available simultaneously.
+
+## Event-Driven Architecture (EDA)
+Components communicate asynchronously by publishing events to a message broker (Kafka, RabbitMQ, EventBridge). Consumers subscribe and react to events independently.
+
+- **Pros**:
+  - **High Scalability & Throughput**: Asynchronous processing allows services to process messages at their own pace without blocking.
+  - **Loose Coupling**: Publishers have zero knowledge of consumers; new services can subscribe to events without modifying existing publishers.
+  - **Fault Tolerance**: If a consumer service goes down, messages persist in the broker and are processed once the service recovers.
+- **Cons**:
+  - Complex debugging & tracing: Requires distributed tracing (OpenTelemetry, Jaeger).
+  - Eventual consistency: Data takes time to sync across services; distributed rollback requires compensating transactions (Saga).
+  - Message broker management overhead: Clustering, partition sizing, and monitoring dead-letter queues (DLQ).
+
+## Practical Example: E-Commerce Order Flow
+- **Synchronous Path**: When placing an order, synchronously call Inventory Service to reserve stock and Payment Service to charge credit card. Gives immediate feedback to the buyer.
+- **Asynchronous Event Path**: Once payment succeeds, publish an `OrderPlaced` event. Downstream services independently consume this event:
+  - `Notification Service` sends confirmation email/SMS.
+  - `Loyalty Points Service` credits points to customer account.
+  - `Warehouse/Shipping Service` generates shipping label and begins packaging.
+
+---
+
+# System Design Interview Framework & Checklist
+
+When tackling a System Design interview, follow this 4-step framework:
+
+## Step 1: Clarify Requirements (5-8 mins)
+- **Functional Requirements**: What are the top 2-3 essential features the user must be able to perform? What is out of scope?
+- **Non-Functional Requirements**:
+  - Scalability: Daily Active Users (DAU), peak vs average traffic.
+  - Availability vs Consistency (CAP Theorem trade-off): High availability (99.99%) or strict financial consistency?
+  - Latency: p95 / p99 SLA (e.g. read latency < 50ms, write latency < 200ms).
+  - Read/Write Ratio: Is the system read-heavy (e.g. Twitter 100:1) or write-heavy (e.g. IoT telemetry)?
+
+## Step 2: Back-of-the-envelope Capacity Estimation (5 mins)
+- **QPS Estimation**:
+  $$\text{Average QPS} = \frac{\text{DAU} \times \text{Requests per user}}{86400 \text{ seconds}}$$
+  $$\text{Peak QPS} = \text{Average QPS} \times 2 \text{ (or } 3\text{)}$$
+- **Storage Estimation**:
+  $$\text{Daily Storage} = \text{New records/day} \times \text{Size per record}$$
+  Multiply by 365 days $\times$ 5 years retention, plus replication factor ($\times 3$).
+- **Network Bandwidth**:
+  $$\text{Bandwidth} = \text{QPS} \times \text{Average payload size}$$
+
+## Step 3: High-Level Architecture (10-15 mins)
+- Draw client (Mobile, Web) $\rightarrow$ DNS $\rightarrow$ CDN (static assets) $\rightarrow$ Load Balancer (ALB/Nginx).
+- API Gateway: Handles authentication, SSL termination, rate limiting, and request routing.
+- Microservices tier: Stateless application services.
+- Data tier:
+  - Primary Database (PostgreSQL / MySQL) with Read Replicas.
+  - In-Memory Cache (Redis) in front of read replicas.
+  - Message Queue / Event Bus (Kafka / RabbitMQ) for async tasks.
+  - Object Storage (AWS S3) for images, videos, and documents.
+
+## Step 4: Deep Dive & Bottlenecks (15-20 mins)
+- **Database Scalability**: Index optimization (B-tree, covering indexes), partitioning, horizontal sharding by shard key.
+- **Cache Strategy**: Cache-Aside, Write-Through, Cache Invalidation, handling Cache Penetration / Cache Stampede.
+- **Resilience & Fault Tolerance**: Circuit breaker pattern, rate limiting, retry with exponential backoff and jitter, dead-letter queues.
+

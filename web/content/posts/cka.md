@@ -416,4 +416,27 @@ Node Components:
 
 These include various components that ensure the node operates smoothly and that Pods run as expected. In addition to kubelet and kube-proxy, this includes the node’s operating system and networking components.
 
-# 
+---
+
+# GitOps with ArgoCD
+
+ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
+
+## Core Concepts
+- **Git as Single Source of Truth**: Application manifests (Helm, Kustomize, plain YAML) are stored in Git.
+- **Automated Synchronization**: ArgoCD continuously compares the desired state in Git with the live state in the K8s cluster and triggers auto-sync or flags drift.
+- **Self-Healing**: If someone manually modifies resources via `kubectl`, ArgoCD can automatically reconcile the cluster back to the state committed in Git.
+
+## Advantages (Pros)
+- **GitOps Model**: Full version control, audit trail, pull request reviews, and 1-click rollback via `git revert`.
+- **Declarative Configuration**: All deployment specifications are transparently stored in YAML.
+- **Automated Syncing**: Reconciles cluster state without requiring CI servers to hold direct cluster credentials (pull-based deployment model).
+- **Multi-Cluster Support**: A single ArgoCD control plane can manage deployments across multiple cloud and on-premise Kubernetes clusters.
+- **Developer UI**: Web dashboard provides real-time visual health, sync status, and pod tree visualization.
+- **Ecosystem Integration**: Seamlessly works with Helm charts, Kustomize overlays, and sealed secrets.
+
+## Trade-offs (Cons)
+- **Initial Complexity**: Learning curve around Git repository structures (monorepo vs repo-per-team) and RBAC configurations.
+- **Secret Management**: Cannot commit raw secrets to Git; requires integration with HashiCorp Vault, AWS Secrets Manager, or Sealed Secrets.
+- **Resource Consumption**: Running ArgoCD controllers and Redis inside the cluster adds overhead.
+- **Workflow Limitations**: ArgoCD focuses strictly on deployment delivery; complex pipelines still require CI tools (GitHub Actions, GitLab CI, Argo Workflows).
