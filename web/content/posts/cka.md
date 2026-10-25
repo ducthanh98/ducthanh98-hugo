@@ -1,7 +1,9 @@
 ---
-title: "Certified kubernetes administrator note"
+title: "Certified Kubernetes Administrator (CKA) Notes"
 date: 2022-11-29T11:17:12+07:00
 draft: false
+categories: ["Cloud & DevOps"]
+tags: ["Kubernetes", "CKA", "DevOps", "Containers", "Cloud"]
 ---
 
 # Architecture
@@ -17,7 +19,6 @@ draft: false
     - Types:
         - Node Controller: Responsible for onboarding new nodes to the cluster, handling situations where nodes are unavailable or get destroyed, 
         - Replication Controller: ensures that the desired number of containers are running at all times in a replication group
-            + 
     - Workflows:
         - Monitoring status from the nodes and taking some actions to keep applications running.
         - it does that through kube-apiserver
@@ -37,6 +38,9 @@ draft: false
 ### Kube-proxy
     - Ensures necessary rules in place on the worker nodes to allow all containers running on them to reach each other.
     - Kube-proxy is a process that runs on each node in the Kubernetes cluster. Its job is to look for new services, and every time a new service is created,it creates the appropriate rules on each node to forward traffic to those services to the backend pods.One way it does this is using iptables rules.In this case, it creates an iptables rule on each node in the cluster to forward traffic heading to the IP of the service
+### CoreDNS 
+-  DNS server used by Kubernetes to provide name resolution for services and pods within the cluster.
+
 ## Core Concept
 ### Pod
     - A single instance of application
@@ -76,8 +80,9 @@ kubectl run --image=nginx nginx
 ### Secrets
     - Secrets are used to store sensitive information like passwords or keys.They're similar to ConfigMaps except that they're stored in an encoded format.
 ### Patterns
-    - Sidecar pattern
-    - adapter pattern
+    - Sidecar pattern : involves deploying a secondary container in the same pod as the main application container. This secondary container is used to provide supporting features or functionality that enhances or complements the main application.
+   
+    - adapter pattern: useful when integrating services that have different interfaces or communication protocols.
     - ambassador pattern
 ## Cluster maintenance
 ### OS Upgraded
@@ -375,3 +380,40 @@ Kubernetes assigns each pod a unique IP address and DNS name, allowing for seaml
 Kubernetes has a broader ecosystem of third-party networking plugins and integrations, such as Calico, Flannel, and Cilium, which offer various networking features and performance optimizations. While Docker Swarm supports some networking plugins, Kubernetes' ecosystem is more mature and diverse, providing users with more options and flexibility to tailor networking solutions to their specific needs.
 
 In summary, while Docker Swarm provides a straightforward networking model suitable for many use cases, Kubernetes offers more advanced networking features and integrations, making it better suited for complex microservices architectures and environments requiring fine-grained network control and observability.
+
+
+
+==========================================================
+
+Control Plane Components
+API Server (kube-apiserver):
+
+ exposes the Kubernetes API, which is used by clients, including kubectl, as well as other components of the control plane. It handles CRUD (Create, Read, Update, Delete) operations on resources and validates and configures data for the API objects.
+
+Controller Manager (kube-controller-manager):
+
+The controller manager runs various controllers that regulate the state of the cluster. Controllers are responsible for ensuring that the desired state of the cluster matches the current state. Examples include the ReplicaSet controller, Deployment controller, and Job controller.
+Scheduler (kube-scheduler):
+
+The scheduler is responsible for assigning newly created pods to nodes. It considers resource requirements, affinity/anti-affinity rules, and other constraints to make scheduling decisions.
+etcd:
+
+etcd is a consistent and highly available key-value store used as Kubernetes' backing store for all cluster data. It stores the configuration data and the state of the Kubernetes cluster.
+Cloud Controller Manager (cloud-controller-manager):
+
+This component is responsible for managing cloud-specific control logic. It interacts with the cloud provider’s API to handle tasks such as managing load balancers, volumes, and instance provisioning.
+Node Components
+Kubelet:
+
+The kubelet is an agent that runs on each node in the cluster. It ensures that containers are running in a Pod. It watches for tasks assigned to the node via the API server, such as starting or stopping containers.
+Kube-Proxy:
+
+Kube-proxy maintains network rules on nodes to allow network communication to Pods. It handles load balancing and service discovery by managing network traffic to and from Pods.
+Container Runtime:
+
+The container runtime is the software responsible for running containers. Kubernetes supports several container runtimes, including Docker, containerd, and CRI-O.
+Node Components:
+
+These include various components that ensure the node operates smoothly and that Pods run as expected. In addition to kubelet and kube-proxy, this includes the node’s operating system and networking components.
+
+# 

@@ -1,18 +1,204 @@
 ---
-title: "Algorithms"
+title: "OOP, SOLID Principles & Design Patterns"
 date: 2023-05-01T22:43:50+07:00
-draft: true
+draft: false
+categories: ["Computer Science"]
+tags: ["OOP", "SOLID", "Design Patterns", "Golang", "Architecture"]
 ---
-# SOLID
-- Single Responsibility Principle (SRP): A class should have only one reason to change. In other words, a class should have only one responsibility or job.
+# OOP
 
+- Encapsulation: Grouping data and methods that operate on the data together, and restricting access to some components. Là quá trình ẩn đi các chi tiết bên trong của một đối tượng và chỉ cung cấp một giao diện rõ ràng cho người dùng (hay các đối tượng khác) để tương tác
+
+```
+type Car struct {
+    brand string
+    speed int
+}
+
+func (c *Car) setSpeed(s int) { c.speed = s }
+func (c *Car) getSpeed() int { return c.speed }
+```
+
+- Abstraction: Hiding complex details and exposing only necessary features via interfaces. Là quá trình chỉ cung cấp thông tin quan trọng cho người dùng và ẩn đi các chi tiết phức tạp. Mục đích của abstraction là giảm sự phức tạp cho người dùng và làm cho chương trình dễ dàng sử dụng hơn.
+
+```
+type Vehicle interface { drive() }
+type Car struct{}
+func (c Car) drive() { fmt.Println("Driving") }
+```
+- Inheritance: Reusing functionality by embedding structs in Go.
+
+```
+type Animal struct { name string }
+func (a Animal) speak() { fmt.Println(a.name, "speaks") }
+
+type Dog struct { Animal }
+```
+- Polymorphism: Treating different types as the same via interfaces.
+
+```
+type Shape interface { area() float64 }
+type Rectangle struct { width, height float64 }
+func (r Rectangle) area() float64 { return r.width * r.height }
+```
+
+# SOLID
+- Single Responsibility Principle (SRP):  A class should have only one reason to change, meaning it should only have one job.
+
+```
+// Bad example: One struct handling multiple responsibilities
+type User struct {
+    name  string
+    email string
+}
+func (u *User) saveToDatabase() {
+    // saving user to DB
+}
+func (u *User) sendEmail() {
+    // sending email
+}
+
+// Good example: Separate concerns
+type User struct {
+    name  string
+    email string
+}
+
+type UserRepository struct{}
+func (r *UserRepository) save(u User) {
+    // saving user to DB
+}
+
+type EmailService struct{}
+func (e *EmailService) send(u User) {
+    // sending email
+}
+
+```
 - Open/Closed Principle (OCP): Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification .
 
-- Liskov Substitution Principle (LSP):  In simpler terms, objects of a superclass should be replaceable with objects of its subclass without affecting the functionality of the program.
+```
+// Before: Modifying the original class for new functionality
+type Rectangle struct {
+    width, height float64
+}
+
+func (r *Rectangle) area() float64 {
+    return r.width * r.height
+}
+
+// After: Extending functionality with interfaces
+type Shape interface {
+    area() float64
+}
+
+type Rectangle struct {
+    width, height float64
+}
+
+func (r Rectangle) area() float64 {
+    return r.width * r.height
+}
+
+type Circle struct {
+    radius float64
+}
+
+func (c Circle) area() float64 {
+    return 3.14 * c.radius * c.radius
+}
+```
+
+- Liskov Substitution Principle (LSP): Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program.
+
+```
+// Correct example: Derived classes can replace base class without issues
+type Bird interface {
+    fly()
+}
+
+type Sparrow struct{}
+func (s Sparrow) fly() {
+    fmt.Println("Sparrow flying")
+}
+
+type Penguin struct{}
+func (p Penguin) fly() {
+    fmt.Println("Penguin cannot fly")
+}
+
+// In this example, Penguin violates LSP if it is expected to fly
+
+```
 
 - Interface Segregation Principle (ISP):  This principle encourages the creation of fine-grained, client-specific interfaces rather than large, general-purpose interfaces.
 
+```
+// Bad example: A single interface with too many methods
+type Worker interface {
+    work()
+    eat()
+}
+
+type Robot struct{}
+func (r Robot) work() {}
+func (r Robot) eat() {}
+
+// Good example: Split into smaller, more specific interfaces
+type Workable interface {
+    work()
+}
+type Eatable interface {
+    eat()
+}
+
+type Robot struct{}
+func (r Robot) work() {}
+func (r Robot) eat() {}
+
+```
+
 - Dependency Inversion Principle (DIP): High-level modules should not depend on low-level modules. This principle encourages decoupling between modules by relying on abstractions (such as interfaces or abstract classes) rather than concrete implementations.
+```
+// Bad example: High-level class depends on low-level implementation
+type Database struct {}
+func (d *Database) connect() {}
+
+type App struct {
+    db *Database
+}
+
+// Good example: Both high-level and low-level depend on interfaces
+type DatabaseConnection interface {
+    connect()
+}
+
+type Database struct {}
+func (d *Database) connect() {}
+
+type App struct {
+    db DatabaseConnection
+}
+
+```
+
+# DI
+- Easier Testing: You can easily replace dependencies with mocks or stubs when writing test cases.
+- Reduced Coupling: Objects don’t need to create their own dependencies, making it easier to change or extend the application without affecting other parts.
+- Improved Flexibility: With DI, you can replace or modify dependencies without changing the code of the objects using them.
+- While Go doesn’t have built-in complex DI frameworks like some other languages (e.g., Spring Framework in Java), you can implement DI manually by passing dependencies into objects via constructors or struct methods.
+
+```
+// Constructor for UserService, where the dependency is injected
+func NewUserService(repo UserRepository) *UserService {
+    return &UserService{repo: repo}
+}
+
+func (s *UserService) SetLogger(logger Logger) {
+    s.logger = logger
+}
+
+```
 
 # Design pattern
 ## Creational patterns

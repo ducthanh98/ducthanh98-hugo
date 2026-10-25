@@ -9,6 +9,58 @@ publishdir = "../ducthanh98.github.io"
     extended = true
     min = "0.62.0"
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[menu]
+  [[menu.main]]
+    weight = 1
+    identifier = "posts"
+    name = "All Posts"
+    url = "/posts/"
+  [[menu.main]]
+    weight = 2
+    identifier = "database"
+    name = "Database"
+    url = "/categories/database/"
+  [[menu.main]]
+    weight = 3
+    identifier = "computer-science"
+    name = "OS & Network"
+    url = "/categories/computer-science/"
+  [[menu.main]]
+    weight = 4
+    identifier = "system-design"
+    name = "System Design"
+    url = "/categories/system-design/"
+  [[menu.main]]
+    weight = 5
+    identifier = "programming-languages"
+    name = "Languages"
+    url = "/categories/programming-languages/"
+  [[menu.main]]
+    weight = 6
+    identifier = "cloud-devops"
+    name = "Cloud & DevOps"
+    url = "/categories/cloud-devops/"
+  [[menu.main]]
+    weight = 7
+    identifier = "interview-prep"
+    name = "Interview"
+    url = "/categories/interview-prep/"
+  [[menu.main]]
+    weight = 8
+    identifier = "categories"
+    name = "All Topics"
+    url = "/categories/"
+  [[menu.main]]
+    weight = 9
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+
 [params]
   # site default theme ["auto", "light", "dark"]
   # 网站默认主题 ["auto", "light", "dark"]

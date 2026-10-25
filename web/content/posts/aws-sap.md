@@ -1,7 +1,9 @@
 ---
-title: "Amazon Solution Architect Professional Note"
+title: "AWS Certified Solutions Architect Professional Notes"
 date: 2022-11-28T22:58:35+07:00
 draft: false
+categories: ["Cloud & DevOps"]
+tags: ["AWS", "Cloud", "Solutions Architect", "Security", "IAM"]
 ---
 
 
@@ -351,6 +353,11 @@ Explicit DENY -> SCP -> Resource Policy -> Permissions Boundaries -> Session Pol
     + Flow hash: Only Network LB
 ### Api Gateway
 - Limit:  29 seconds, 10MB payload
+- Kind: 
+    + HTTP: Lambda, HTTP
+    + WS: Lambda, HTTP, Services
+    + Rest: Lambda, HTTP,Services,
+    + Rest Private: Only accessible from inside VPC
 - Integrations: * HTTP
                     * Lambda
                     * AWS Service
