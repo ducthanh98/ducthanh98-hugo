@@ -6,27 +6,9 @@ categories: ["Programming Languages"]
 tags: ["Golang", "Concurrency", "Goroutines", "Memory", "Hexagonal Architecture", "Interview"]
 ---
 
-# [Channel Document](#channel)
-# [Context document](#context)
-# [IO Reader Writer](#reader-writer)
-# [Mutex Lock, Sync package](#mutex-sync)
-# [GC, Stack & Heap Document](#gc-stack-heap)
+# Concurrency & Channels
 
-# [Go routines document](#go-routine)
-# [Go scheduler document](#go-scheduler)
-# [Memory leak](#profiling-memory)
-# [Generic document](#generic)
-
-# [Test document](#test)
-
-# [Hexagonal document](#hexagonal)
-# [rest vs grapqh](#rest)
-# [Git document](#git)
-# [Analyze code document](#analyze-code)
-# [Dependency injection](#di)
-# [Security consideration](#common-security-considerations)
-
-## Channel
+## Channel Types
 ### unbuffered channel 
     An unbuffered channel does not have any capacity to store values. 
 It requires both a sender and a receiver to be ready at the same time to 

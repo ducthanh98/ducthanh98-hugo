@@ -5,13 +5,8 @@ draft: false
 categories: ["System Design"]
 tags: ["Microservices", "System Design", "CQRS", "Saga", "Architecture", "Distributed Systems"]
 ---
-# [Monolith vs microservice](#compare-mono-micro)
-# [Queue document](#queue)
-# [Microservice design pattern document](#microservice-design-pattern)
-# [Deployment strategy](#deployment-strategies)
-# [Cách chia micro](#devide-micro)
 
-# Compare mono micro
+# Monolith vs Microservices Architecture
 ## Monolithic Architecture
 Pros:
     - Simpler to develop and deploy: Single codebase, fewer moving parts.

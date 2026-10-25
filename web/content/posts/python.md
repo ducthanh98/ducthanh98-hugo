@@ -6,13 +6,7 @@ categories: ["Programming Languages"]
 tags: ["Python", "Generators", "Concurrency", "GIL"]
 ---
 
-# Python
-## [Context Manager](#context)
-## [Yield keyword](#yield)
-
-
-
-# Context
+# Context Managers
 - Context Manager giúp quản lý tài nguyên tự động, đảm bảo tài nguyên (file, database connection, network socket,...) được mở và đóng đúng cách.
 - Đóng tài nguyên tự động, tránh lỗi quên close()
 - Xử lý lỗi tự động, giảm code try-except-finally

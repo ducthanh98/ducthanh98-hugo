@@ -6,24 +6,9 @@ categories: ["Programming Languages"]
 tags: ["JavaScript", "TypeScript", "React", "Frontend", "Event Loop"]
 ---
 
-# Javascript
-## [Closure function document](#closure-function)
-## [Hoisting document](#hoisting)
-## [Event loop stack document](#eventloop-stack)
-# Typescript
-### [Operator Type (union, intersection, pick , omit) document](#operator-type) 
-### [Interface, type document](#interface-type)
+# JavaScript Fundamentals
 
-
-# React
-## [Hooks document](#hooks)
-## [Life cycles document](#life-cycles)
-## [Detect changes document](#detect-changes)
-## [Memoization document](#memoization)
-## [Lazy load document](#lazy-load)
-
-
-# Closure function
+## Closures
 - A closure in JavaScript allows the function to remember the variables from the enclosing function where it was created, enabling encapsulation and state retention.
 
 # Hoisting

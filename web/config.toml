@@ -4,6 +4,10 @@ title = 'ThanhLD Site'
 theme = "LoveIt"
 publishdir = "../ducthanh98.github.io"
 
+[author]
+  name = "ThanhLD"
+  link = "https://github.com/ducthanh98"
+
 [module]
   [module.hugoVersion]
     extended = true
@@ -259,7 +263,7 @@ publishdir = "../ducthanh98.github.io"
   # Social config in home page
   # 主页的社交信息设置
   [params.social]
-    GitHub = ""
+    GitHub = "ducthanh98"
     Linkedin = ""
     Twitter = ""
     Instagram = ""
