@@ -11,7 +11,7 @@ tags: ["Python", "Generators", "Concurrency", "GIL"]
 - Đóng tài nguyên tự động, tránh lỗi quên close()
 - Xử lý lỗi tự động, giảm code try-except-finally
 
-```
+```python
 class FileManager:
     def __init__(self, filename):
         self.filename = filename

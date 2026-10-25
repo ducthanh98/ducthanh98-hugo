@@ -381,40 +381,37 @@ Kubernetes has a broader ecosystem of third-party networking plugins and integra
 
 In summary, while Docker Swarm provides a straightforward networking model suitable for many use cases, Kubernetes offers more advanced networking features and integrations, making it better suited for complex microservices architectures and environments requiring fine-grained network control and observability.
 
+---
 
+# Kubernetes Architecture Components
 
-==========================================================
+## Control Plane Components
 
-Control Plane Components
-API Server (kube-apiserver):
+### API Server (`kube-apiserver`)
+Exposes the Kubernetes API, which is used by clients (including `kubectl`) and worker nodes. Validates and configures data for pod, service, replication controller, and all other API objects. It is the only component that speaks directly to `etcd`.
 
- exposes the Kubernetes API, which is used by clients, including kubectl, as well as other components of the control plane. It handles CRUD (Create, Read, Update, Delete) operations on resources and validates and configures data for the API objects.
+### Controller Manager (`kube-controller-manager`)
+Runs core controller loops that regulate cluster state to match desired specifications (Node Controller, Replication Controller, Endpoints Controller, ServiceAccount Controller).
 
-Controller Manager (kube-controller-manager):
+### Scheduler (`kube-scheduler`)
+Assigns newly created unscheduled pods to optimal worker nodes based on resource requests/limits, affinity/anti-affinity specifications, taints, and tolerations.
 
-The controller manager runs various controllers that regulate the state of the cluster. Controllers are responsible for ensuring that the desired state of the cluster matches the current state. Examples include the ReplicaSet controller, Deployment controller, and Job controller.
-Scheduler (kube-scheduler):
+### `etcd`
+Consistent, highly available distributed key-value store holding the complete state and configuration of the Kubernetes cluster.
 
-The scheduler is responsible for assigning newly created pods to nodes. It considers resource requirements, affinity/anti-affinity rules, and other constraints to make scheduling decisions.
-etcd:
+### Cloud Controller Manager (`cloud-controller-manager`)
+Integrates cloud-specific vendor APIs for load balancer provisioning, route management, and node lifecycle.
 
-etcd is a consistent and highly available key-value store used as Kubernetes' backing store for all cluster data. It stores the configuration data and the state of the Kubernetes cluster.
-Cloud Controller Manager (cloud-controller-manager):
+## Worker Node Components
 
-This component is responsible for managing cloud-specific control logic. It interacts with the cloud provider’s API to handle tasks such as managing load balancers, volumes, and instance provisioning.
-Node Components
-Kubelet:
+### Kubelet
+Node agent running on every worker node. Ensures containers described in PodSpecs are running and reports node/pod health metrics back to the API Server.
 
-The kubelet is an agent that runs on each node in the cluster. It ensures that containers are running in a Pod. It watches for tasks assigned to the node via the API server, such as starting or stopping containers.
-Kube-Proxy:
+### Kube-Proxy
+Maintains network rules (iptables or IPVS) on nodes to forward connection requests to backend pods across cluster service virtual IPs.
 
-Kube-proxy maintains network rules on nodes to allow network communication to Pods. It handles load balancing and service discovery by managing network traffic to and from Pods.
-Container Runtime:
-
-The container runtime is the software responsible for running containers. Kubernetes supports several container runtimes, including Docker, containerd, and CRI-O.
-Node Components:
-
-These include various components that ensure the node operates smoothly and that Pods run as expected. In addition to kubelet and kube-proxy, this includes the node’s operating system and networking components.
+### Container Runtime
+Software executing container images (containerd, CRI-O, Docker).
 
 ---
 

@@ -9,7 +9,7 @@ tags: ["OOP", "SOLID", "Design Patterns", "Golang", "Architecture"]
 
 - Encapsulation: Grouping data and methods that operate on the data together, and restricting access to some components. Là quá trình ẩn đi các chi tiết bên trong của một đối tượng và chỉ cung cấp một giao diện rõ ràng cho người dùng (hay các đối tượng khác) để tương tác
 
-```
+```go
 type Car struct {
     brand string
     speed int
@@ -21,14 +21,14 @@ func (c *Car) getSpeed() int { return c.speed }
 
 - Abstraction: Hiding complex details and exposing only necessary features via interfaces. Là quá trình chỉ cung cấp thông tin quan trọng cho người dùng và ẩn đi các chi tiết phức tạp. Mục đích của abstraction là giảm sự phức tạp cho người dùng và làm cho chương trình dễ dàng sử dụng hơn.
 
-```
+```go
 type Vehicle interface { drive() }
 type Car struct{}
 func (c Car) drive() { fmt.Println("Driving") }
 ```
 - Inheritance: Reusing functionality by embedding structs in Go.
 
-```
+```go
 type Animal struct { name string }
 func (a Animal) speak() { fmt.Println(a.name, "speaks") }
 
@@ -36,7 +36,7 @@ type Dog struct { Animal }
 ```
 - Polymorphism: Treating different types as the same via interfaces.
 
-```
+```go
 type Shape interface { area() float64 }
 type Rectangle struct { width, height float64 }
 func (r Rectangle) area() float64 { return r.width * r.height }
@@ -45,7 +45,7 @@ func (r Rectangle) area() float64 { return r.width * r.height }
 # SOLID
 - Single Responsibility Principle (SRP):  A class should have only one reason to change, meaning it should only have one job.
 
-```
+```go
 // Bad example: One struct handling multiple responsibilities
 type User struct {
     name  string
@@ -77,7 +77,7 @@ func (e *EmailService) send(u User) {
 ```
 - Open/Closed Principle (OCP): Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification .
 
-```
+```go
 // Before: Modifying the original class for new functionality
 type Rectangle struct {
     width, height float64
@@ -111,7 +111,7 @@ func (c Circle) area() float64 {
 
 - Liskov Substitution Principle (LSP): Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program.
 
-```
+```go
 // Correct example: Derived classes can replace base class without issues
 type Bird interface {
     fly()
@@ -133,7 +133,7 @@ func (p Penguin) fly() {
 
 - Interface Segregation Principle (ISP):  This principle encourages the creation of fine-grained, client-specific interfaces rather than large, general-purpose interfaces.
 
-```
+```go
 // Bad example: A single interface with too many methods
 type Worker interface {
     work()
@@ -159,7 +159,7 @@ func (r Robot) eat() {}
 ```
 
 - Dependency Inversion Principle (DIP): High-level modules should not depend on low-level modules. This principle encourages decoupling between modules by relying on abstractions (such as interfaces or abstract classes) rather than concrete implementations.
-```
+```go
 // Bad example: High-level class depends on low-level implementation
 type Database struct {}
 func (d *Database) connect() {}
@@ -188,7 +188,7 @@ type App struct {
 - Improved Flexibility: With DI, you can replace or modify dependencies without changing the code of the objects using them.
 - While Go doesn’t have built-in complex DI frameworks like some other languages (e.g., Spring Framework in Java), you can implement DI manually by passing dependencies into objects via constructors or struct methods.
 
-```
+```go
 // Constructor for UserService, where the dependency is injected
 func NewUserService(repo UserRepository) *UserService {
     return &UserService{repo: repo}
@@ -210,7 +210,7 @@ func (s *UserService) SetLogger(logger Logger) {
     + Open/Closed Principle. You can introduce new types of products into the program without breaking existing client code.
 - Cons:
     + The code may become more complicated since you need to introduce a lot of new subclasses to implement the pattern
-```
+```go
 type IGun interface {
     setName(name string)
     setPower(power int)
@@ -243,7 +243,7 @@ func getGun(gunType string) (IGun, error) {
 - Abstract Factory patterns work around a super-factory which creates other factories. This factory is also called as factory of factories.
 ### Builder pattern
 - Builder is a creational design pattern that lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
-```
+```go
 type IBuilder interface {
     setWindowType()
     setDoorType()
@@ -380,7 +380,7 @@ func main() {
     + The singleton object is initialized only when it’s requested for the first time.
 - Const
     + The pattern requires special treatment in a multithreaded environment so that multiple threads won’t create a singleton object several times.
-```
+```go
 var lock = &sync.Mutex{}
 
 type single struct {
@@ -408,7 +408,7 @@ func getInstance() *single {
 
 ### Prototype
 - Prototype is a creational design pattern that lets you copy existing objects without making your code dependent on their classes
-```
+```go
 type Inode interface {
     print(string)
     clone() Inode
@@ -429,7 +429,7 @@ func (f *File) clone() Inode {
 ## Structural patterns
 ### Decorator pattern
 - structural design pattern that lets you attach new behaviors to objects by placing these objects inside special wrapper objects that contain the behaviors.
-```
+```go
 type TomatoTopping struct {
     pizza IPizza
 }
@@ -450,7 +450,7 @@ func (c *CheeseTopping) getPrice() int {
 ```
 ### Adapter pattern
 - Adapter is a structural design pattern that allows objects with incompatible interfaces to collaborate.
-```
+```go
 type Computer interface {
     InsertIntoLightningPort()
 }
@@ -484,7 +484,7 @@ func (w *WindowsAdapter) InsertIntoLightningPort() {
 
 ### Strategy pattern
 - Strategy is a behavioral design pattern that lets you define a family of algorithms, put each of them into a separate class, and make their objects interchangeable.
-```
+```go
 package main
 
 type EvictionAlgo interface {
@@ -502,7 +502,7 @@ func (l *Fifo) evict(c *Cache) {
 ```
 ## Observer pattern
 - Observer is a behavioral design pattern that lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they’re observing.
-```
+```go
 type Subject interface {
     register(observer Observer)
     deregister(observer Observer)

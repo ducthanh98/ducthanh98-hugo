@@ -25,14 +25,14 @@ tags: ["JavaScript", "TypeScript", "React", "Frontend", "Event Loop"]
 
 # Operator Type
 - Union Types (|)
-```
+```javascript
 let value: number | string;
 value = 42;         // Valid
 value = "hello";    // Valid
 ```
 
 - Intersection Types (&)
-```
+```javascript
 type A = { name: string };
 type B = { age: number };
 
@@ -44,7 +44,7 @@ let person: A & B = {
 ```
 
 - Pick creates a type by selecting specific properties from an existing type, while Omit creates a type by excluding specific properties.
-```
+```javascript
 type User = { name: string; age: number; email: string };
 type UserWithoutEmail = Omit<User, "email">; // { name: string; age: number; }
 
@@ -69,7 +69,7 @@ type UserWithoutEmail = Omit<User, "email">; // { name: string; age: number; }
 - Manages side effects in your component (e.g., data fetching, subscriptions).
 - You can specify dependencies to control when the effect runs.
 - Can use Cleanup to close connection, ...
-```
+```javascript
 useEffect(() => {
   // Code to run on mount and when dependencies change
   return () => {
@@ -80,17 +80,17 @@ useEffect(() => {
 ```
 ## useContext: 
 - Allows you to access the value of a React context directly in a functional component.
-```
+```javascript
 const value = useContext(MyContext);
 ```
 ## useReducer
 - An alternative to useState for managing complex state logic. It resembles Redux but works within a single component.
-```
+```javascript
 const [state, dispatch] = useReducer(reducer, initialState);
 ```
 ## UseCallback
 - Returns a memoized version of a callback function, preventing unnecessary re-creations on re-renders.
-```
+```javascript
 const memoizedCallback = useCallback(() => {
   // Your callback logic
 }, [dependencies]);
@@ -98,7 +98,7 @@ const memoizedCallback = useCallback(() => {
 ```
 ## UseMemo
 - useMemo allows you to memoize expensive calculations and only re-compute them when specific dependencies change. This can prevent unnecessary re-renders of child components.
-```
+```javascript
 const computedValue = useMemo(() => {
   return expensiveCalculation(inputValue);
 }, [inputValue]);
@@ -130,7 +130,7 @@ const computedValue = useMemo(() => {
   - If a component’s props change frequently
   - Internal State Changes:
 
-```
+```javascript
 import React from 'react';
 
 const MyComponent = React.memo(({ data }) => {
@@ -141,7 +141,7 @@ const MyComponent = React.memo(({ data }) => {
 # Lazy load
 - You can use React.lazy to dynamically import components when they are needed. 
 Combine this with Suspense to provide a fallback UI while the component is loading.
-```
+```javascript
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 

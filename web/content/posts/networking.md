@@ -225,3 +225,51 @@ OAuth 2.0 is an authorization framework that enables third-party applications to
   - Used strictly against the Auth Server to obtain a fresh access token without forcing the user to re-authenticate when the access token expires.
   - Refresh Token Rotation: Each time a refresh token is used, a new refresh token is issued, invalidating the old one to prevent replay attacks if compromised.
 
+---
+
+# Common Web Security Vulnerabilities & Mitigations
+
+## 1. Cross-Site Scripting (XSS)
+Occurs when an application includes untrusted data in a web page without proper validation or escaping, allowing attackers to execute malicious JavaScript in the victim's browser (stealing cookies, session tokens, or performing unauthorized actions).
+
+### Types of XSS:
+- **Stored XSS**: Malicious script is permanently stored on the server (e.g. database comment, user bio) and served to all users viewing the page.
+- **Reflected XSS**: Script is reflected off a web server via query parameters or form inputs (e.g. search query in URL).
+- **DOM-based XSS**: Vulnerability exists purely in client-side JavaScript modifying the DOM without validation (e.g. `element.innerHTML = location.hash`).
+
+### Mitigations:
+- **Context-aware Output Encoding**: Escape HTML, attributes, and JavaScript (e.g. DOMPurify for user HTML).
+- **Content Security Policy (CSP)**: Restrict trusted script origins.
+- **HttpOnly Cookies**: Prevent JavaScript from accessing session tokens via `document.cookie`.
+
+## 2. Cross-Site Request Forgery (CSRF)
+Tricks an authenticated user into executing unwanted actions on a web application in which they are currently logged in.
+
+### Mitigations:
+- **Anti-CSRF Tokens**: Cryptographic, non-guessable tokens checked on state-changing requests (`POST`, `PUT`, `DELETE`).
+- **SameSite Cookie Attribute**: Set `SameSite=Strict` or `SameSite=Lax` to prevent cookies from being sent in cross-site requests.
+- **Re-authentication**: Require password or MFA re-entry for sensitive actions (e.g. changing password or email).
+
+## 3. Clickjacking (UI Redressing)
+Attackers trick users into clicking hidden buttons or iframes overlaid transparently on top of benign UI elements.
+
+### Mitigations:
+- **Content Security Policy**: `frame-ancestors 'none'` or `frame-ancestors 'self'`.
+- **HTTP Header**: `X-Frame-Options: DENY` or `X-Frame-Options: SAMEORIGIN`.
+
+## 4. Man-in-the-Middle (MitM)
+Attackers intercept network communication between client and server to eavesdrop or tamper with data.
+
+### Mitigations:
+- **HTTPS & TLS 1.3**: Encrypt all traffic end-to-end.
+- **HSTS (HTTP Strict Transport Security)**: `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` forces browsers to only connect over HTTPS.
+
+## 5. Content Security Policy (CSP)
+HTTP response header specifying allowed content sources:
+
+```http
+Content-Security-Policy: default-src 'self'; script-src 'self' https://trustedscripts.com; img-src 'self' data:; report-uri /csp-report-endpoint;
+```
+- **Report-Only Mode**: `Content-Security-Policy-Report-Only` allows testing policies without breaking live application features.
+
+
