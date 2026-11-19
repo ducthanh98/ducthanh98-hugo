@@ -1,0 +1,5 @@
+// Keep long code lines inside the code block (scroll horizontally)
+// instead of overflowing and widening the whole page.
+.single .content pre {
+  overflow-x: auto;
+}

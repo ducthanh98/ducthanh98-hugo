@@ -2062,8 +2062,8 @@ Every role has two kinds of policy: [▶ #20 02:21](https://youtu.be/kPgSsv0hFj0
 ![Roles list with the Trusted entities column](images/020-1-roles-trusted-entities-column.jpg "Identity Center roles trust a SAML provider ARN; AWSServiceRoleFor roles trust a service and are labelled Service-Linked Role.")
 
 The Roles page (23 roles in the demo member account) shows each role's trusted entity: [▶ #20 01:10](https://youtu.be/kPgSsv0hFj0?t=70)
-- `AWSReservedSSO_AdministratorAccess_…`, `_ReadOnly_…`, `_SecurityBreakGlass_…`, `_SecurityDeploy_…` → **Identity Provider: arn:aws:iam::<acct>:saml-provider/…** (Identity Center permission sets).
-- `AWSServiceRoleForAccessAnalyzer`, `…ForCloudTrail`, `…ForConfig`, `…ForIncidentManager`, `…ForOrganizations`, `…ForSSO`, `…ForSupport`, `…ForTrustedAdvisor`, `…ForCloudFormationStackSetsOrgMember` → **AWS Service: <service> (Service-Linked Role)**.
+- `AWSReservedSSO_AdministratorAccess_…`, `_ReadOnly_…`, `_SecurityBreakGlass_…`, `_SecurityDeploy_…` → **Identity Provider: arn:aws:iam::&lt;acct&gt;:saml-provider/…** (Identity Center permission sets).
+- `AWSServiceRoleForAccessAnalyzer`, `…ForCloudTrail`, `…ForConfig`, `…ForIncidentManager`, `…ForOrganizations`, `…ForSSO`, `…ForSupport`, `…ForTrustedAdvisor`, `…ForCloudFormationStackSetsOrgMember` → **AWS Service: &lt;service&gt; (Service-Linked Role)**.
 - "Last activity" helps spot unused roles.
 
 **Example: `AWSServiceRoleForOrganizations`** ("Service-linked role used by AWS Organizations to enable integration of
@@ -4745,7 +4745,7 @@ delegated admin (or the management account). Storage: **Use existing S3 bucket**
 trail `org-management-events` is **multi-Region**, **enabled for all accounts**, management events only (KMS and RDS Data API
 events not excluded), no data or Insights events.
 
-![S3 layout after the org trail runs](images/040-5-org-trail-s3-layout.jpg "AWSLogs/<org-id>/ holds one folder per account, each with CloudTrail/ and CloudTrail-Digest/ by Region/year/month/day.")
+![S3 layout after the org trail runs](images/040-5-org-trail-s3-layout.jpg "AWSLogs/{org-id}/ holds one folder per account, each with CloudTrail/ and CloudTrail-Digest/ by Region/year/month/day.")
 
 **Resulting layout:** `AWSLogs/<management-account-id>/` and `AWSLogs/<org-id>/<each-account-id>/`. Each account has
 `CloudTrail/` (compressed `.json.gz` log files) and `CloudTrail-Digest/` (for **log file validation**), both split by
@@ -7218,7 +7218,7 @@ transitions such as **Standard-IA** after N days. [▶ #117 03:00](https://youtu
 ![Rollup Regions and storage classes](images/117-3-rollup-regions-storage-classes.jpg "Define target objective: rollup Regions need two or more Regions; storage class transitions such as Standard-IA after N days.")
 
 {{< admonition type=example title="Console demo: enable Security Lake org-wide ([▶ #117](https://youtu.be/hZQG0naBmZQ))" open=false >}}
-1. **Management account** → Security Lake → **Get started** → "Delegate administration to your Log Archive account" → enter the 12-digit account ID (from the access portal) → **Delegate**. Banner: "<id> is now the delegated administrator of Security Lake". [▶ #117 00:21](https://youtu.be/hZQG0naBmZQ?t=21)
+1. **Management account** → Security Lake → **Get started** → "Delegate administration to your Log Archive account" → enter the 12-digit account ID (from the access portal) → **Delegate**. Banner: "&lt;id&gt; is now the delegated administrator of Security Lake". [▶ #117 00:21](https://youtu.be/hZQG0naBmZQ?t=21)
 2. **Log Archive account** → Security Lake → Get started → **Ingest specific AWS sources**: demo picks CloudTrail management events, Security Hub, VPC Flow Logs (Lambda and EKS deselected). [▶ #117 01:41](https://youtu.be/hZQG0naBmZQ?t=101)
 3. **Regions:** all supported (recommended) or specific. Demo: **US East (N. Virginia)** only. [▶ #117 02:01](https://youtu.be/hZQG0naBmZQ?t=121)
 4. **Accounts:** all accounts in the org / specific accounts / this account. Demo: **all accounts** + **automatically enable for new accounts**. [▶ #117 02:22](https://youtu.be/hZQG0naBmZQ?t=142)
@@ -7266,7 +7266,7 @@ the database itself**, so queries would fail. Possibly fixed since. Fix it in th
 2. Principal type: **Principals** (not "Principals by attributes").
 3. Principals: **External accounts** → paste the Security Tooling account ID and **press Enter**. Clicking doesn't add it (UI quirk). [▶ #117 08:50](https://youtu.be/hZQG0naBmZQ?t=530)
 4. Resources: **Named Data Catalog resources** (not LF-Tags) → catalog = this account → **Database** = the Security Lake database. No tables/views needed (already configured). [▶ #117 09:11](https://youtu.be/hZQG0naBmZQ?t=551)
-5. Permissions: **Describe** only → Grant → "Granting catalog permissions to ARNs: <security tooling account>". [▶ #117 09:21](https://youtu.be/hZQG0naBmZQ?t=561)
+5. Permissions: **Describe** only → Grant → "Granting catalog permissions to ARNs: &lt;security tooling account&gt;". [▶ #117 09:21](https://youtu.be/hZQG0naBmZQ?t=561)
 6. **Security Tooling** account → **RAM → Shared with me → Resource shares**: two shares, one with tables/views (from subscriber creation) and one for the **database**. [▶ #117 09:50](https://youtu.be/hZQG0naBmZQ?t=590)
 7. Normally you must **Accept** them (select → Accept resource share). Here they were already **Active** (auto-accepted, unexpected). [▶ #117 10:01](https://youtu.be/hZQG0naBmZQ?t=601)
 {{< /admonition >}}
